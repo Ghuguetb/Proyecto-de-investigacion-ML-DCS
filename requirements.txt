@@ -1,0 +1,13 @@
+# Proyecto: Dificultad cognitiva subjetiva y factores de riesgo modificables (NHIS 2022-2023)
+# Python 3.12 (probado con 3.12.3). Semilla aleatoria global: SEED = 42 (src/utils.py)
+numpy==2.4.4
+pandas==3.0.2
+scipy==1.17.1
+scikit-learn==1.8.0
+statsmodels==0.15.0
+matplotlib==3.10.8
+seaborn==0.13.2
+missingno==0.5.2
+joblib==1.5.3
+ipykernel==7.3.0
+jupyter-book==1.0.4.post1

@@ -1,0 +1,9 @@
+format: jb-book
+root: intro
+chapters:
+  - file: notebooks/01_base_de_datos
+  - file: notebooks/02_eda
+  - file: notebooks/03_fuga_y_preprocesamiento
+  - file: notebooks/04_modelo_base
+  - file: conclusiones
+  - file: referencias
