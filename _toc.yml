@@ -1,5 +1,5 @@
 format: jb-book
-root: intro
+root: 00_intro
 chapters:
   - file: notebooks/01_base_de_datos
   - file: notebooks/02_eda
