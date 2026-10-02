@@ -7,7 +7,7 @@ Primer entregable del proyecto de Machine Learning, selección de la base de dat
 ```
 proyecto_nhis_cognicion/
 ├── _config.yml, _toc.yml        Configuración del Jupyter Book
-├── intro.md, conclusiones.md, referencias.md
+├── 00_intro.md, conclusiones.md, referencias.md
 ├── notebooks/
 │   ├── 00_proyecto_completo.ipynb       Notebook único con las 4 etapas, texto final
 │   ├── 01_base_de_datos.ipynb           Sección 1 de la guía
