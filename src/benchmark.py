@@ -77,7 +77,7 @@ REJILLAS = {
 }
 
 
-class PesosBalanceados(BaseEstimator, ClassifierMixin):
+class PesosBalanceados(ClassifierMixin, BaseEstimator):
     """Envuelve un clasificador sin class_weight (XGBoost, Naive Bayes) para pasarle pesos
     'balanced' por muestra, calculados con las etiquetas del fold de entrenamiento."""
     def __init__(self, estimator=None):
@@ -167,15 +167,19 @@ class Evaluador:
         k = _clave(params)
         if k in self.cache:
             return self.cache[k]
+        error = None
         try:
             pipe = crear_pipeline(self.modelo, self.balanceo, params)
-            s = float(np.mean(cross_val_score(pipe, self.X, self.y, cv=self.cv, scoring="average_precision")))
-        except Exception:
-            s = 0.0
+            s = float(np.mean(cross_val_score(pipe, self.X, self.y, cv=self.cv, scoring="average_precision",
+                                              error_score="raise")))
+            if not np.isfinite(s):
+                s, error = 0.0, "puntaje no finito"
+        except Exception as e:  # se registra el error en vez de ocultarlo
+            s, error = 0.0, repr(e)[:200]
         self.cache[k] = s
         self.mejor = max(self.mejor, s)
         self.historia.append({"eval": len(self.historia) + 1, "score": s, "mejor_hasta_ahora": self.mejor,
-                              "t": time.time() - self.t0, "params": params})
+                              "t": time.time() - self.t0, "params": params, "error": error})
         return s
 
 
