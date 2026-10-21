@@ -1,0 +1,13 @@
+modelo,balanceo,calibracion,ECE,Brier,PR_AUC
+LogReg,class_weight,ninguna,0.2143,0.1796,0.5312
+LogReg,class_weight,Platt (sigmoide),0.016,0.1296,0.5312
+LogReg,class_weight,isotónica,0.0061,0.1294,0.5291
+LogReg,SMOTE,ninguna,0.2228,0.1843,0.5255
+LogReg,SMOTE,Platt (sigmoide),0.0112,0.1303,0.5251
+LogReg,SMOTE,isotónica,0.0092,0.1303,0.5223
+XGBoost,class_weight,ninguna,0.2182,0.181,0.5296
+XGBoost,class_weight,Platt (sigmoide),0.0141,0.1304,0.5297
+XGBoost,class_weight,isotónica,0.008,0.1299,0.5285
+XGBoost,SMOTE,ninguna,0.1363,0.1513,0.5182
+XGBoost,SMOTE,Platt (sigmoide),0.016,0.1319,0.5164
+XGBoost,SMOTE,isotónica,0.0055,0.1316,0.5152

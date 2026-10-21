@@ -472,6 +472,8 @@ def layout_benchmark():
                                             grafica("b-rangos")]),
                             "La línea punteada es la diferencia crítica de Nemenyi. Con las 108 juntas no tiene potencia (cinco folds), por eso se analiza por factor."), lg=5),
         ], className="g-3"),
+        tarjeta("Diagrama de diferencia crítica (Nemenyi) por factor", html.Img(src="/assets/e3/cd_diagrama.png", style={"width": "100%", "maxWidth": "860px", "display": "block", "margin": "0 auto"}),
+                "Rango medio de cada nivel (1 es el mejor, a la derecha). Las barras gruesas unen a los niveles que Nemenyi no distingue."),
         tarjeta("Tabla maestra (filtrable y ordenable)", html.Div([
             dbc.Row([dbc.Col([html.Div("Modelo", className="ctrl-et"), dcc.Dropdown(id="b-f-modelo", options=[{"label": E.NOMBRES[k], "value": k} for k in E.NOMBRES if k != "EBM"], multi=True, placeholder="Todos")], md=4),
                      dbc.Col([html.Div("Balanceo", className="ctrl-et"), dcc.Dropdown(id="b-f-bal", options=[{"label": k, "value": k} for k in E.BAL_ORDEN], multi=True, placeholder="Todos")], md=4),
@@ -501,6 +503,14 @@ def layout_optimizacion():
             dbc.Col(tarjeta("Exponente empírico de ajuste", _tabla(E.E3["expo"], tam=12), "Pendiente del tiempo de ajuste contra n en escala log-log, de 2.000 a 32.000 filas."), lg=5),
         ], className="g-3"),
         dbc.Row([
+            dbc.Col(tarjeta("Diversidad genética por generación", html.Img(src="/assets/e3/diversidad_genetica.png", style={"width": "100%"}),
+                            "Distancia media entre los individuos. Cae a la mitad en tres generaciones, señal de convergencia rápida con poblaciones de 4."), lg=5),
+            dbc.Col(tarjeta("Sensibilidad a la semilla (5 semillas)", html.Div([_tabla(E.E3["sem_mod"], tam=4), html.Div(style={"height": "14px"}), _tabla(E.E3["sem_opt"], tam=4)]),
+                            "Arriba, PR-AUC de XGBoost y Random Forest con 5 semillas del modelo. Abajo, mejor PR-AUC interno que encuentra cada optimizador con 5 semillas."), lg=7),
+        ], className="g-3"),
+        tarjeta("Complejidad teórica, estándar frente a optimizado (32.000 filas)", _tabla(E.E3["cx"], tam=12),
+                "Tiempos y memoria medidos en un proceso limpio por configuración. PR-AUC sobre 4.000 filas apartadas del entrenamiento."),
+        dbc.Row([
             dbc.Col(tarjeta("Costo total por modelo (segundos)", _tabla(E.E3["costo_m"].sort_values("t_total_s", ascending=False), tam=10)), lg=6),
             dbc.Col(tarjeta("Costo total por optimizador (segundos)", _tabla(E.E3["costo_o"].sort_values("t_total_s", ascending=False), tam=10)), lg=6),
         ], className="g-3"),
@@ -516,6 +526,9 @@ def layout_final():
             dbc.Col(tarjeta("Conjunto de prueba (intervalo 95 %)", _tabla(E.E3["test"], tam=6), "Coincide con el capítulo 4 del libro para la logística (PR-AUC 0,538, ROC-AUC 0,804)."), lg=7),
             dbc.Col(tarjeta("DeLong entre finalistas (Holm)", _tabla(E.E3["test_delong"].round(4), tam=8), "Ninguna comparación es significativa."), lg=5),
         ], className="g-3"),
+        tarjeta("Accuracy, precision, recall, F1 y AUC de los finalistas (prueba)", html.Div([_tabla(E.E3["fin"], tam=8),
+                html.Img(src="/assets/e3/confusion_roc_finalistas.png", style={"width": "100%", "marginTop": "14px"})]),
+                "Con el umbral 0,5 y con el 0,245 elegido en el entrenamiento. El criterio principal de validación fue la PR-AUC, porque con prevalencia de 20,6 % el accuracy engaña."),
         dbc.Row([
             dbc.Col(tarjeta(None, grafica("f-calib"), "SMOTE, ADASYN y class_weight suben el recall pero el modelo deja de estimar la prevalencia real."), lg=6),
             dbc.Col(tarjeta(None, html.Img(src="/assets/e3/calibracion.png", style={"width": "100%"}), "Curvas de calibración de los finalistas en la prueba."), lg=6),
@@ -525,6 +538,12 @@ def layout_final():
             dbc.Col(tarjeta(None, html.Div([grafica("f-lime"),
                 html.P(f"Spearman global SHAP y LIME: {n_es(t['spearman_global_SHAP_LIME'], 2)} · mediana local: {n_es(t['spearman_local_mediana'], 2)} · coincidencia de las 3 principales: {n_es(t['coincidencia_top3_variables'], 2)} · estabilidad de LIME (Jaccard top 5): {n_es(t['estabilidad_LIME_jaccard_top5'], 2)}", className="nota")]),
                             "SHAP es exacto para árboles; LIME aproxima con 3.000 perturbaciones por instancia. Por eso se usa SHAP como base."), lg=6),
+        ], className="g-3"),
+        tarjeta("Recalibración de los modelos balanceados (Platt e isotónica)", _tabla(E.E3["recal"], tam=12),
+                "Evaluado en el 30 % del entrenamiento. La recalibración baja el ECE de 0,14 a 0,22 hasta menos de 0,02 sin perder PR-AUC."),
+        dbc.Row([
+            dbc.Col(tarjeta("SHAP local, acierto", html.Img(src="/assets/e3/shap_waterfall_acierto.png", style={"width": "100%"}), "Probabilidad 0,90, empujan la depresión, las pérdidas sensoriales y el ACV."), lg=6),
+            dbc.Col(tarjeta("SHAP local, error", html.Img(src="/assets/e3/shap_waterfall_error.png", style={"width": "100%"}), "Probabilidad 0,046, ninguna variable empuja hacia arriba."), lg=6),
         ], className="g-3"),
         dbc.Row([
             dbc.Col(tarjeta(None, html.Img(src="/assets/e3/shap_xgboost.png", style={"width": "100%"}), "SHAP de XGBoost."), lg=6),

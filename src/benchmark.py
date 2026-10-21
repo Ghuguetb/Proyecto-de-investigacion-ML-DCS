@@ -102,6 +102,22 @@ def balanceo_aplicable(modelo, balanceo):
 
 
 def crear_clasificador(modelo, p, cw):
+    """Construye el clasificador sin ajustar para un modelo del benchmark.
+    
+    Parameters
+    ----------
+    modelo : str
+        Uno de KNN, NaiveBayes, LogReg, DecisionTree, RandomForest, XGBoost, SVM.
+    p : dict
+        Hiperparametros del modelo.
+    cw : bool
+        Si es True, aplica pesos de clase balanceados (con PesosBalanceados cuando el modelo no los admite).
+    
+    Returns
+    -------
+    sklearn estimator
+        SVM sale envuelto en CalibratedClassifierCV (sigmoide) para tener probabilidades.
+    """
     sem = SEED
     if modelo == "KNN":
         return KNeighborsClassifier(n_jobs=1, **p)
@@ -125,6 +141,21 @@ def crear_clasificador(modelo, p, cw):
 
 
 def crear_pipeline(modelo, balanceo, params):
+    """Arma el Pipeline completo preprocesamiento -> remuestreo -> modelo.
+    
+    Todo se ajusta solo con los datos de entrenamiento de cada fold, de modo que no hay fuga.
+    
+    Parameters
+    ----------
+    modelo, balanceo : str
+        Nombre del modelo y de la tecnica de balanceo (sin_balanceo, class_weight, SMOTE, ADASYN).
+    params : dict
+        Hiperparametros del modelo.
+    
+    Returns
+    -------
+    imblearn.pipeline.Pipeline
+    """
     pasos = [("pre", construir_preprocesador())]
     if balanceo == "SMOTE":
         pasos.append(("bal", SMOTE(random_state=SEED)))
@@ -138,6 +169,20 @@ def crear_pipeline(modelo, balanceo, params):
 # Decodificacion de genes [0,1] -> hiperparametros (usada por Random y Genetica)
 # ---------------------------------------------------------------------------
 def decodificar(genes, espacio):
+    """Convierte genes en [0, 1] a hiperparametros reales (usada por Random y el genetico).
+    
+    Parameters
+    ----------
+    genes : sequence of float
+        Un valor entre 0 y 1 por hiperparametro, en el orden del espacio.
+    espacio : dict
+        Especificacion del espacio de busqueda del modelo (tipo, limites y escala logaritmica).
+    
+    Returns
+    -------
+    dict
+        Hiperparametros listos para crear_clasificador.
+    """
     p = {}
     for g, (nombre, spec) in zip(genes, espacio.items()):
         g = min(max(float(g), 0.0), 1.0)
@@ -152,6 +197,7 @@ def decodificar(genes, espacio):
 
 
 def _clave(p):
+    """Clave estable de un diccionario de hiperparametros, para el cache de evaluaciones."""
     return json.dumps(p, sort_keys=True, default=str)
 
 
@@ -184,6 +230,7 @@ class Evaluador:
 
 
 def mejores_params(ev):
+    """Devuelve los hiperparametros de la mejor evaluacion del historial de un Evaluador."""
     return max(ev.historia, key=lambda h: h["score"])["params"]
 
 
@@ -191,11 +238,13 @@ def mejores_params(ev):
 # Los cuatro optimizadores
 # ---------------------------------------------------------------------------
 def buscar_grid(ev, modelo, semilla):
+    """Grid Search sobre la rejilla gruesa REJILLAS[modelo]. Evalua cada punto con el Evaluador `ev` (CV interna sin fuga)."""
     for p in ParameterGrid(REJILLAS[modelo]):
         ev(p)
 
 
 def buscar_random(ev, modelo, semilla):
+    """Random Search con PRESUPUESTO muestras uniformes en el espacio unitario, decodificadas con `decodificar`."""
     rng = np.random.RandomState(semilla)
     esp = ESPACIOS[modelo]
     for _ in range(PRESUPUESTO):
@@ -203,6 +252,7 @@ def buscar_random(ev, modelo, semilla):
 
 
 def buscar_bayesiana(ev, modelo, semilla):
+    """Optimizacion bayesiana con Optuna. Surrogate TPE (cuantil por defecto), 4 pruebas iniciales aleatorias y PRESUPUESTO pruebas."""
     import optuna
     optuna.logging.set_verbosity(optuna.logging.WARNING)
     esp = ESPACIOS[modelo]
@@ -275,6 +325,22 @@ BUSCADORES = {"Grid": buscar_grid, "Random": buscar_random, "Bayesiana": buscar_
 # Metricas
 # ---------------------------------------------------------------------------
 def ece(y, p, bins=10):
+    """Error de calibracion esperado (ECE) con bins de igual frecuencia.
+    
+    Parameters
+    ----------
+    y : array of int
+        Desenlaces observados (0 o 1).
+    p : array of float
+        Probabilidades predichas.
+    bins : int
+        Numero de bins por cuantiles.
+    
+    Returns
+    -------
+    float
+        Promedio ponderado de |frecuencia observada - probabilidad media predicha| por bin.
+    """
     q = np.quantile(p, np.linspace(0, 1, bins + 1))
     q[0], q[-1] = -1e-9, 1 + 1e-9
     idx = np.digitize(p, q[1:-1])
@@ -287,6 +353,18 @@ def ece(y, p, bins=10):
 
 
 def metricas(y, p):
+    """Metricas de un fold: PR-AUC, ROC-AUC, Brier, ECE, F1 y recall con umbral 0.5.
+    
+    Parameters
+    ----------
+    y : array of int
+    p : array of float
+        Probabilidades predichas de la clase positiva.
+    
+    Returns
+    -------
+    dict
+    """
     yhat = (p >= 0.5).astype(int)
     return {"PR_AUC": average_precision_score(y, p), "ROC_AUC": roc_auc_score(y, p), "Brier": brier_score_loss(y, p),
             "ECE": ece(y, p), "F1_05": f1_score(y, yhat, zero_division=0),
@@ -297,6 +375,7 @@ def metricas(y, p):
 # Una tarea = (modelo, balanceo, optimizador, fold externo)
 # ---------------------------------------------------------------------------
 def indices_externos(y):
+    """Particion de los 5 folds externos (estratificada, semilla global) compartida por todas las combinaciones."""
     return list(StratifiedKFold(N_EXTERNO, shuffle=True, random_state=SEED).split(np.zeros(len(y)), y))
 
 
@@ -335,5 +414,6 @@ def ejecutar_tarea(modelo, balanceo, opt, fold, X, y, carpeta):
 
 
 def cargar_xy():
+    """Carga el conjunto de entrenamiento y devuelve (X con las predictoras, y con el objetivo)."""
     train, _ = cargar_particiones()
     return train[PREDICTORAS].reset_index(drop=True), train[OBJETIVO].values
