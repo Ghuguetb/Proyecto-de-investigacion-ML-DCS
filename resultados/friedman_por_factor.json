@@ -1,0 +1,59 @@
+{
+ "modelo": {
+  "chi2": 28.457142857142856,
+  "p": 7.704898843558694e-05,
+  "CD": 4.028172008255962,
+  "rangos": {
+   "LogReg": 1.2,
+   "SVM": 2.2,
+   "XGBoost": 2.6,
+   "RandomForest": 4.0,
+   "DecisionTree": 5.4,
+   "NaiveBayes": 5.6,
+   "KNN": 7.0
+  },
+  "PR_AUC_media": {
+   "DecisionTree": 0.4618,
+   "KNN": 0.4431,
+   "LogReg": 0.5166,
+   "NaiveBayes": 0.4605,
+   "RandomForest": 0.5019,
+   "SVM": 0.5158,
+   "XGBoost": 0.5117
+  }
+ },
+ "balanceo": {
+  "chi2": 13.560000000000002,
+  "p": 0.0035695719978437583,
+  "CD": 2.0976056585788982,
+  "rangos": {
+   "class_weight": 1.0,
+   "sin_balanceo": 2.0,
+   "SMOTE": 3.4,
+   "ADASYN": 3.6
+  },
+  "PR_AUC_media": {
+   "ADASYN": 0.4825,
+   "SMOTE": 0.483,
+   "class_weight": 0.4979,
+   "sin_balanceo": 0.4938
+  }
+ },
+ "optimizador": {
+  "chi2": 8.759999999999991,
+  "p": 0.03265800851965366,
+  "CD": 2.0976056585788982,
+  "rangos": {
+   "Bayesiana": 1.4,
+   "Grid": 2.0,
+   "Random": 3.0,
+   "Genetica": 3.6
+  },
+  "PR_AUC_media": {
+   "Bayesiana": 0.4915,
+   "Genetica": 0.4849,
+   "Grid": 0.4907,
+   "Random": 0.4888
+  }
+ }
+}

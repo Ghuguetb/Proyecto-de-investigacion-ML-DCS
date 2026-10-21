@@ -1,0 +1,89 @@
+               evals  PR_AUC_interno  evals_hasta_cerca_del_optimo  t_busqueda_s  t_por_eval_s
+optimizador                                                                                   
+Bayesiana    11.9926          0.4821                        4.4148       10.9719        0.9151
+Genetica      6.9111          0.4756                        2.8889        6.1826        0.8273
+Grid         10.0741          0.4803                        5.0000       10.1079        0.9100
+Random       11.9778          0.4791                        4.2519       10.9500        0.9151
+dims preprocesadas (44903, 35)
+KNN (brute)          n=  2000 fit=   0.00s pred(2000)=  0.07s
+KNN (brute)          n=  4000 fit=   0.00s pred(2000)=  0.07s
+KNN (brute)          n=  8000 fit=   0.00s pred(2000)=  0.10s
+KNN (brute)          n= 16000 fit=   0.01s pred(2000)=  0.17s
+KNN (brute)          n= 32000 fit=   0.01s pred(2000)=  0.34s
+KNN (kd_tree)        n=  2000 fit=   0.01s pred(2000)=  0.10s
+KNN (kd_tree)        n=  4000 fit=   0.01s pred(2000)=  0.20s
+KNN (kd_tree)        n=  8000 fit=   0.02s pred(2000)=  0.40s
+KNN (kd_tree)        n= 16000 fit=   0.05s pred(2000)=  0.82s
+KNN (kd_tree)        n= 32000 fit=   0.13s pred(2000)=  2.22s
+NaiveBayes           n=  2000 fit=   0.00s pred(2000)=  0.00s
+NaiveBayes           n=  4000 fit=   0.00s pred(2000)=  0.00s
+NaiveBayes           n=  8000 fit=   0.01s pred(2000)=  0.00s
+NaiveBayes           n= 16000 fit=   0.01s pred(2000)=  0.00s
+NaiveBayes           n= 32000 fit=   0.03s pred(2000)=  0.00s
+LogReg (liblinear)   n=  2000 fit=   0.01s pred(2000)=  0.00s
+LogReg (liblinear)   n=  4000 fit=   0.01s pred(2000)=  0.00s
+LogReg (liblinear)   n=  8000 fit=   0.03s pred(2000)=  0.00s
+LogReg (liblinear)   n= 16000 fit=   0.07s pred(2000)=  0.00s
+LogReg (liblinear)   n= 32000 fit=   0.14s pred(2000)=  0.00s
+LogReg (saga)        n=  2000 fit=   0.02s pred(2000)=  0.00s
+LogReg (saga)        n=  4000 fit=   0.05s pred(2000)=  0.00s
+LogReg (saga)        n=  8000 fit=   0.07s pred(2000)=  0.00s
+LogReg (saga)        n= 16000 fit=   0.18s pred(2000)=  0.00s
+LogReg (saga)        n= 32000 fit=   0.29s pred(2000)=  0.00s
+LogReg (lbfgs)       n=  2000 fit=   0.01s pred(2000)=  0.00s
+LogReg (lbfgs)       n=  4000 fit=   0.02s pred(2000)=  0.00s
+LogReg (lbfgs)       n=  8000 fit=   0.03s pred(2000)=  0.00s
+LogReg (lbfgs)       n= 16000 fit=   0.08s pred(2000)=  0.00s
+LogReg (lbfgs)       n= 32000 fit=   0.14s pred(2000)=  0.00s
+DecisionTree         n=  2000 fit=   0.01s pred(2000)=  0.00s
+DecisionTree         n=  4000 fit=   0.01s pred(2000)=  0.00s
+DecisionTree         n=  8000 fit=   0.02s pred(2000)=  0.00s
+DecisionTree         n= 16000 fit=   0.04s pred(2000)=  0.00s
+DecisionTree         n= 32000 fit=   0.09s pred(2000)=  0.00s
+RandomForest         n=  2000 fit=   0.21s pred(2000)=  0.02s
+RandomForest         n=  4000 fit=   0.35s pred(2000)=  0.03s
+RandomForest         n=  8000 fit=   0.49s pred(2000)=  0.02s
+RandomForest         n= 16000 fit=   0.87s pred(2000)=  0.02s
+RandomForest         n= 32000 fit=   1.50s pred(2000)=  0.03s
+XGBoost (hist)       n=  2000 fit=   0.05s pred(2000)=  0.00s
+XGBoost (hist)       n=  4000 fit=   0.08s pred(2000)=  0.00s
+XGBoost (hist)       n=  8000 fit=   0.08s pred(2000)=  0.00s
+XGBoost (hist)       n= 16000 fit=   0.16s pred(2000)=  0.00s
+XGBoost (hist)       n= 32000 fit=   0.27s pred(2000)=  0.00s
+XGBoost (exact)      n=  2000 fit=   0.14s pred(2000)=  0.00s
+XGBoost (exact)      n=  4000 fit=   0.28s pred(2000)=  0.00s
+XGBoost (exact)      n=  8000 fit=   0.57s pred(2000)=  0.00s
+XGBoost (exact)      n= 16000 fit=   1.35s pred(2000)=  0.00s
+LinearSVC            n=  2000 fit=   0.01s pred(2000)=  0.00s
+LinearSVC            n=  4000 fit=   0.01s pred(2000)=  0.00s
+LinearSVC            n=  8000 fit=   0.03s pred(2000)=  0.00s
+LinearSVC            n= 16000 fit=   0.06s pred(2000)=  0.00s
+LinearSVC            n= 32000 fit=   0.14s pred(2000)=  0.00s
+SGD (hinge)          n=  2000 fit=   0.02s pred(2000)=  0.00s
+SGD (hinge)          n=  4000 fit=   0.02s pred(2000)=  0.00s
+SGD (hinge)          n=  8000 fit=   0.06s pred(2000)=  0.00s
+SGD (hinge)          n= 16000 fit=   0.16s pred(2000)=  0.00s
+SGD (hinge)          n= 32000 fit=   0.35s pred(2000)=  0.00s
+SVC (kernel rbf)     n=  2000 fit=   0.08s pred(2000)=  0.11s
+SVC (kernel rbf)     n=  4000 fit=   0.36s pred(2000)=  0.26s
+SVC (kernel rbf)     n=  8000 fit=   1.85s pred(2000)=  0.49s
+EBM n=2000 fit=1.05s
+EBM n=4000 fit=1.73s
+EBM n=8000 fit=2.12s
+EBM n=16000 fit=3.79s
+modelo
+DecisionTree          0.92
+EBM                   0.58
+KNN (brute)           0.53
+KNN (kd_tree)         1.10
+LinearSVC             1.13
+LogReg (lbfgs)        0.99
+LogReg (liblinear)    0.98
+LogReg (saga)         0.98
+NaiveBayes            0.81
+RandomForest          0.70
+SGD (hinge)           1.15
+SVC (kernel rbf)      2.23
+XGBoost (exact)       1.08
+XGBoost (hist)        0.58
+FIN

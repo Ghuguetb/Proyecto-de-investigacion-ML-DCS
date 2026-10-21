@@ -1,0 +1,12 @@
+{
+ "n_instancias": 150,
+ "spearman_global_SHAP_LIME": 0.8214285714285712,
+ "spearman_local_mediana": 0.7857142857142856,
+ "spearman_local_rango_intercuartil": [
+  0.6321428571428571,
+  0.8741071428571427
+ ],
+ "coincidencia_top3_variables": 0.571111111111111,
+ "estabilidad_LIME_jaccard_top5": 0.6988095238095238,
+ "tiempo_nota": "SHAP exacto para arboles, LIME aproxima con perturbaciones (3000 muestras por instancia)"
+}
