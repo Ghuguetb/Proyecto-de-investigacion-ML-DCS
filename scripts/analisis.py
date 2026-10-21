@@ -22,6 +22,11 @@ g = fold.groupby(llaves)
 maestra = g[met].mean().add_suffix("_media").join(g[met].std().add_suffix("_sd")).join(
     g.agg(n_folds=("fold", "count"), evals=("n_evals", "mean"), t_busqueda_s=("t_busqueda_s", "sum"),
           t_refit_s=("t_refit_s", "sum"), PR_AUC_interno=("PR_AUC_interno", "mean"))).reset_index()
+# hiperparametros finales por fold externo y semillas (registro estructurado que pide la guia)
+hp = fold.sort_values("fold").groupby(llaves)["mejores_params"].apply(lambda x: json.dumps([str(v) for v in x])).rename("hiperparametros_finales_por_fold")
+maestra = maestra.merge(hp.reset_index(), on=llaves, how="left")
+maestra["semilla_global"] = 42
+maestra["semillas_por_fold"] = "42+fold (0 a 4)"
 maestra["t_total_min"] = (maestra["t_busqueda_s"] + maestra["t_refit_s"]) / 60
 maestra["rango_PR_AUC"] = maestra["PR_AUC_media"].rank(ascending=False, method="min")
 maestra = maestra.sort_values("rango_PR_AUC")
