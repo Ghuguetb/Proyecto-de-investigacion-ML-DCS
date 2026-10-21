@@ -1,4 +1,4 @@
-# Dashboard DCS · Entregable 2
+# Dashboard DCS · Proyecto de Machine Learning
 
 Dificultad cognitiva subjetiva (DCS) y factores de riesgo modificables de demencia · NHIS 2022-2023.
 Autores: Santiago Díaz, Gina Huguet y Leiry Mares (Maestría en Ingeniería Biomédica, Universidad del Norte).
@@ -26,7 +26,7 @@ src/assets/           style.css (tema claro crema/tierras) y bootstrap.min.css l
 src/dcs/calculos.py   modelos, bootstrap, subgrupos, odds ratios, PCA, caché
 src/dcs/figuras.py    todas las figuras Plotly (las usa también el JBook)
 src/dcs/utils.py      rutas, diccionario de variables y carga de particiones
-data/                 train.csv, test.csv y la base completa del Entregable 1
+data/                 train.csv, test.csv y la base completa del proyecto
 ```
 
 ## Nota sobre dash-tools

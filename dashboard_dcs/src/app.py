@@ -1,5 +1,5 @@
 """
-app.py · Dashboard del Entregable 2
+app.py · Dashboard del proyecto
 ===================================
 Dificultad cognitiva subjetiva (DCS) y factores de riesgo modificables de demencia · NHIS 2022-2023
 Autores: Santiago Díaz, Gina Huguet y Leiry Mares · Maestría en Ingeniería Biomédica, Universidad del Norte
@@ -8,7 +8,7 @@ Estructura generada con dash-tools (plantilla "tabs") y ampliada para el proyect
 
     dashboard_dcs/
     ├── Procfile · runtime.txt · requirements.txt     (despliegue, creados por dashtools)
-    ├── data/                  train.csv, test.csv y base completa del Entregable 1
+    ├── data/                  train.csv, test.csv y base completa del proyecto
     ├── cache/artefactos.pkl   modelos y resultados pesados, calculados una sola vez
     └── src/
         ├── app.py             ESTE ARCHIVO: diseño de las 3 pestañas y callbacks
@@ -37,6 +37,7 @@ from dash import Input, Output, State, ctx, dash_table, dcc, html
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))   # para importar el paquete dcs/
 
+from dcs import benchmark_tabs as E                               # noqa: E402
 from dcs import figuras as F                                   # noqa: E402
 from dcs.calculos import ETIQUETAS, obtener_artefactos         # noqa: E402
 from dcs.utils import (DICCIONARIO, OBJETIVO, ORDENES, PREDICTORAS, PREDICTORAS_CAT,  # noqa: E402
@@ -194,12 +195,12 @@ def layout_contexto():
         # --- 2.4 Ruta del proyecto ------------------------------------------------------------------
         seccion("Ruta del proyecto"),
         tarjeta(None, dbc.Row([
-            dbc.Col(html.Div([html.Div("1", className="circulo"), html.Div("Entregable 1", className="t"),
+            dbc.Col(html.Div([html.Div("1", className="circulo"), html.Div("Capítulos 1 a 4 del libro", className="t"),
                               html.Div("Base de datos, EDA, fuga de datos y modelo base", className="d")], className="paso"), md=4),
-            dbc.Col(html.Div([html.Div("2", className="circulo"), html.Div("Entregable 2 · este dashboard", className="t"),
-                              html.Div("Contexto, EDA interactivo y modelos base", className="d")], className="paso actual"), md=4),
-            dbc.Col(html.Div([html.Div("3", className="circulo"), html.Div("Siguientes entregas", className="t"),
-                              html.Div("Modelos no lineales, sensibilidad y equidad", className="d")], className="paso futuro"), md=4),
+            dbc.Col(html.Div([html.Div("2", className="circulo"), html.Div("Capítulo 5 del libro", className="t"),
+                              html.Div("Benchmark de 112 combinaciones, EBM, interpretabilidad y robustez", className="d")], className="paso"), md=4),
+            dbc.Col(html.Div([html.Div("3", className="circulo"), html.Div("Este dashboard", className="t"),
+                              html.Div("Recorre todo el proyecto de forma interactiva, en seis pestañas", className="d")], className="paso actual"), md=4),
         ])),
     ])
 
@@ -342,7 +343,7 @@ def control_sim(v):
 
 def layout_modelos():
     return html.Div([
-        seccion("Modelos base", "La regresión logística es el modelo principal (como en el Entregable 1); la SVM lineal se incluye como alternativa. "
+        seccion("Modelos base", "La regresión logística es el modelo principal (como en el capítulo 4 del libro); la SVM lineal se incluye como alternativa. "
                                 "Ambos usan el mismo preprocesamiento y el mismo conjunto de prueba, reservado desde el inicio."),
         # --- 4.1 Controles -----------------------------------------------------------------------------
         html.Div(dbc.Row([
@@ -434,25 +435,132 @@ def layout_modelos():
 
 
 # ---------------------------------------------------------------------------
+# 4b. PESTAÑAS DEL BENCHMARK (benchmark, optimización, resultados finales, robustez)
+# ---------------------------------------------------------------------------
+def _dd(id_, opciones, valor):
+    return dcc.Dropdown(id=id_, options=opciones, value=valor, clearable=False)
+
+
+def _tabla(df, id_=None, tam=12, **extra):
+    cols = [{"name": c, "id": c} for c in df.columns]
+    kw = {"id": id_} if id_ else {}
+    return dash_table.DataTable(columns=cols, data=df.to_dict("records"), page_size=tam, sort_action="native", **kw, **estilo_tabla(**extra))
+
+
+def layout_benchmark():
+    m = E.E3["maestra"]
+    mejor = m.sort_values("PR_AUC_media", ascending=False).iloc[0]
+    ebm = E.E3["ebm"].iloc[0]
+    return html.Div([
+        seccion("Benchmark de 112 combinaciones",
+                "7 modelos × 4 técnicas de balanceo × 4 optimizadores de hiperparámetros, con validación cruzada anidada (5 folds externos, 3 internos) y preprocesamiento dentro de cada fold. "
+                "La tabla muestra 108 combinaciones: KNN no admite pesos de clase, así que las 4 de KNN con class_weight no aplican. El EBM va aparte como modelo original."),
+        dbc.Row([
+            dbc.Col(kpi("108", "combinaciones evaluadas", "540 tareas, 5.529 evaluaciones internas, 0 errores"), md=3, className="mb-3"),
+            dbc.Col(kpi(n_es(mejor["PR_AUC_media"], 3), "mejor PR-AUC externo", f"{E.NOMBRES[mejor['modelo']]} · {mejor['balanceo']} · {mejor['optimizador']}", "teal"), md=3, className="mb-3"),
+            dbc.Col(kpi("≈ 0,80", "techo de ROC-AUC", "igual en todos los modelos buenos", "dorado"), md=3, className="mb-3"),
+            dbc.Col(kpi("sin ganador", "entre logística, SVM y XGBoost", "DeLong con Holm no separa a ninguno", "osc"), md=3, className="mb-3"),
+        ]),
+        html.Div(dbc.Row([
+            dbc.Col([html.Div("Métrica", className="ctrl-et"), _dd("b-metrica", [{"label": v, "value": k} for k, v in E.METRICAS.items()], "PR_AUC_media")], md=6),
+            dbc.Col([html.Div("Optimizador", className="ctrl-et"), _dd("b-opt", [{"label": "Promedio de los cuatro", "value": "todos"}] + [{"label": o, "value": o} for o in E.OPT_ORDEN], "todos")], md=6),
+        ]), className="ctrl-fila"),
+        dbc.Row([
+            dbc.Col(tarjeta(None, grafica("b-mapa"), "Balancear (SMOTE, ADASYN) no mejora la discriminación. class_weight y sin balanceo quedan arriba."), lg=7),
+            dbc.Col(tarjeta(None, html.Div([html.Div("Prueba de Friedman por factor", className="ctrl-et"),
+                                            _dd("b-factor", [{"label": f.capitalize(), "value": f} for f in ("modelo", "balanceo", "optimizador")], "modelo"),
+                                            grafica("b-rangos")]),
+                            "La línea punteada es la diferencia crítica de Nemenyi. Con las 108 juntas no tiene potencia (cinco folds), por eso se analiza por factor."), lg=5),
+        ], className="g-3"),
+        tarjeta("Tabla maestra (filtrable y ordenable)", html.Div([
+            dbc.Row([dbc.Col([html.Div("Modelo", className="ctrl-et"), dcc.Dropdown(id="b-f-modelo", options=[{"label": E.NOMBRES[k], "value": k} for k in E.NOMBRES if k != "EBM"], multi=True, placeholder="Todos")], md=4),
+                     dbc.Col([html.Div("Balanceo", className="ctrl-et"), dcc.Dropdown(id="b-f-bal", options=[{"label": k, "value": k} for k in E.BAL_ORDEN], multi=True, placeholder="Todos")], md=4),
+                     dbc.Col([html.Div("Optimizador", className="ctrl-et"), dcc.Dropdown(id="b-f-opt", options=[{"label": k, "value": k} for k in E.OPT_ORDEN], multi=True, placeholder="Todos")], md=4)], className="mb-3"),
+            html.Div(id="b-tabla")]),
+            "Incluye métricas externas con su desviación, evaluaciones, hiperparámetros finales de cada fold, semilla global (42) y semilla por fold (42 + fold), y tiempo total."),
+        dbc.Row([
+            dbc.Col(tarjeta("DeLong contra la mejor combinación (Holm)", _tabla(E.E3["delong"].sort_values("p_Holm").head(20).round(4), tam=10),
+                            "Solo XGBoost queda detrás de la mejor, por 0,002 a 0,003 de AUC, una diferencia sin relevancia práctica."), lg=6),
+            dbc.Col(tarjeta("EBM frente a las referencias", _tabla(E.E3["ebm"].round(4), tam=10),
+                            "El modelo original iguala a los mejores y no los supera. Su ventaja es que cada predicción se puede leer directamente."), lg=6),
+        ], className="g-3"),
+        html.Div("Las 28 combinaciones de regresión del enunciado no aplican porque la variable objetivo es binaria. Ridge y Lasso quedan cubiertas por la regresión logística con penalización L2 y L1.", className="aviso"),
+    ])
+
+
+def layout_optimizacion():
+    return html.Div([
+        seccion("Optimización y costo computacional",
+                "Grid, Random, bayesiana (Optuna) y genética (DEAP) con un presupuesto de unas 12 evaluaciones sobre una submuestra de 8.000 filas y PR-AUC como criterio interno."),
+        dbc.Row([
+            dbc.Col(tarjeta(None, grafica("o-conv"), "La genética hizo 6,9 evaluaciones contra 12 por su caché y población de 4, así que su desventaja es en parte de presupuesto."), lg=5),
+            dbc.Col(tarjeta(None, grafica("o-pareto"), "Cada punto es una combinación. Más tiempo no significa mejor desempeño."), lg=7),
+        ], className="g-3"),
+        dbc.Row([
+            dbc.Col(tarjeta(None, grafica("o-comp"), "Lineales cerca de 1, SVM con kernel RBF cerca de 2 (n al cuadrado), XGBoost hist unas 8 veces más rápido que el método exacto."), lg=7),
+            dbc.Col(tarjeta("Exponente empírico de ajuste", _tabla(E.E3["expo"], tam=12), "Pendiente del tiempo de ajuste contra n en escala log-log, de 2.000 a 32.000 filas."), lg=5),
+        ], className="g-3"),
+        dbc.Row([
+            dbc.Col(tarjeta("Costo total por modelo (segundos)", _tabla(E.E3["costo_m"].sort_values("t_total_s", ascending=False), tam=10)), lg=6),
+            dbc.Col(tarjeta("Costo total por optimizador (segundos)", _tabla(E.E3["costo_o"].sort_values("t_total_s", ascending=False), tam=10)), lg=6),
+        ], className="g-3"),
+    ])
+
+
+def layout_final():
+    t = E.E3["lime_j"]
+    return html.Div([
+        seccion("Resultado final, calibración, interpretabilidad y robustez",
+                "Los finalistas se reajustan con toda la partición de entrenamiento y se evalúan una sola vez en la prueba reservada. Los intervalos son bootstrap percentil (1.000 remuestras)."),
+        dbc.Row([
+            dbc.Col(tarjeta("Conjunto de prueba (intervalo 95 %)", _tabla(E.E3["test"], tam=6), "Coincide con el capítulo 4 del libro para la logística (PR-AUC 0,538, ROC-AUC 0,804)."), lg=7),
+            dbc.Col(tarjeta("DeLong entre finalistas (Holm)", _tabla(E.E3["test_delong"].round(4), tam=8), "Ninguna comparación es significativa."), lg=5),
+        ], className="g-3"),
+        dbc.Row([
+            dbc.Col(tarjeta(None, grafica("f-calib"), "SMOTE, ADASYN y class_weight suben el recall pero el modelo deja de estimar la prevalencia real."), lg=6),
+            dbc.Col(tarjeta(None, html.Img(src="/assets/e3/calibracion.png", style={"width": "100%"}), "Curvas de calibración de los finalistas en la prueba."), lg=6),
+        ], className="g-3"),
+        dbc.Row([
+            dbc.Col(tarjeta(None, grafica("f-imp"), "Frecuencia de síntomas depresivos, diagnóstico de depresión y edad lideran en los tres métodos."), lg=6),
+            dbc.Col(tarjeta(None, html.Div([grafica("f-lime"),
+                html.P(f"Spearman global SHAP y LIME: {n_es(t['spearman_global_SHAP_LIME'], 2)} · mediana local: {n_es(t['spearman_local_mediana'], 2)} · coincidencia de las 3 principales: {n_es(t['coincidencia_top3_variables'], 2)} · estabilidad de LIME (Jaccard top 5): {n_es(t['estabilidad_LIME_jaccard_top5'], 2)}", className="nota")]),
+                            "SHAP es exacto para árboles; LIME aproxima con 3.000 perturbaciones por instancia. Por eso se usa SHAP como base."), lg=6),
+        ], className="g-3"),
+        dbc.Row([
+            dbc.Col(tarjeta(None, html.Img(src="/assets/e3/shap_xgboost.png", style={"width": "100%"}), "SHAP de XGBoost."), lg=6),
+            dbc.Col(tarjeta(None, html.Img(src="/assets/e3/ebm_global.png", style={"width": "100%"}), "Funciones de forma del EBM. La edad reproduce la U del EDA."), lg=6),
+        ], className="g-3"),
+        seccion("Robustez", "Pesos muestrales, umbral, datos faltantes, ruido en las entradas, subgrupos y validación temporal de 2022 a 2023."),
+        html.Div(dbc.Row([dbc.Col([html.Div("Análisis", className="ctrl-et"),
+                                   _dd("r-an", [{"label": l, "value": v} for l, v in [("Pesos muestrales", "pesos"), ("Umbral de decisión", "umbral"), ("Datos faltantes", "faltantes"),
+                                                                                   ("Ruido en las entradas", "perturbacion"), ("Subgrupos (logística)", "subgrupos"), ("Temporal 2022 a 2023", "temporal")]], "pesos")], md=6)]), className="ctrl-fila"),
+        tarjeta(None, html.Div(id="r-tabla"), "Los pesos muestrales no reemplazan un análisis con diseño complejo de la NHIS, que queda declarado como limitación."),
+    ])
+
+
+# ---------------------------------------------------------------------------
 # 5. ENSAMBLADO DE LA APP Y CALLBACKS
 # ---------------------------------------------------------------------------
-app = dash.Dash(__name__, title="DCS y factores de riesgo de demencia · Entregable 2",
+app = dash.Dash(__name__, title="DCS y factores de riesgo de demencia · Proyecto de Machine Learning",
                 suppress_callback_exceptions=True)   # Bootstrap 5 va local en assets/ (funciona sin internet)
 server = app.server   # necesario para el despliegue (Procfile → gunicorn)
 
 app.layout = html.Div([
     # Encabezado
     html.Div(dbc.Container([
-        html.Div("Machine Learning · Entregable 2", className="eyebrow"),
+        html.Div("Proyecto de Machine Learning", className="eyebrow"),
         html.H1("Dificultad cognitiva subjetiva y factores de riesgo modificables de demencia"),
-        html.P("Dashboard analítico: contexto del problema, análisis exploratorio interactivo y modelos base sobre la National Health Interview Survey (NHIS) 2022-2023.", className="lead"),
+        html.P("Dashboard analítico: contexto del problema, análisis exploratorio, modelos base benchmark de 112 combinaciones, optimización, interpretabilidad y robustez sobre la National Health Interview Survey (NHIS) 2022-2023.", className="lead"),
         html.Div([html.Span("Santiago Díaz", className="chip autor"), html.Span("Gina Huguet", className="chip autor"), html.Span("Leiry Mares", className="chip autor"),
                   html.Span("Maestría en Ingeniería Biomédica · Universidad del Norte", className="chip"), html.Span("56.129 adultos · 14 predictoras", className="chip")]),
     ], fluid="xl"), className="hero"),
     dbc.Container([
         dbc.Tabs([dbc.Tab(label="1 · Contexto del problema", tab_id="tab-contexto"),
                   dbc.Tab(label="2 · Análisis exploratorio (EDA)", tab_id="tab-eda"),
-                  dbc.Tab(label="3 · Modelos base", tab_id="tab-modelos")], id="tabs", active_tab="tab-contexto"),
+                  dbc.Tab(label="3 · Modelos base", tab_id="tab-modelos"),
+                  dbc.Tab(label="4 · Benchmark", tab_id="tab-bench"),
+                  dbc.Tab(label="5 · Optimización y costo", tab_id="tab-opt"),
+                  dbc.Tab(label="6 · Resultado final, interpretación y robustez", tab_id="tab-final")], id="tabs", active_tab="tab-contexto"),
         html.Div(id="contenido", className="pb-4"),
         html.Div("Fuente de los datos: NCHS, National Health Interview Survey 2022 y 2023, Sample Adult Interview (CDC). Semilla aleatoria 42 · partición 80/20 estratificada. "
                  "Las asociaciones son transversales y no implican causalidad.", className="pie"),
@@ -467,6 +575,12 @@ def pintar_pestana(tab):
         return layout_eda()
     if tab == "tab-modelos":
         return layout_modelos()
+    if tab == "tab-bench":
+        return layout_benchmark()
+    if tab == "tab-opt":
+        return layout_optimizacion()
+    if tab == "tab-final":
+        return layout_final()
     return layout_contexto()
 
 
@@ -658,6 +772,48 @@ def simulador(*valores):
              html.P([f"Con el umbral óptimo del modelo ({n_es(UM_LR, 3)}), este perfil ", html.B("sí" if supera else "no"),
                      " sería marcado como de mayor riesgo." if supera else " sería marcado."])]
     return F.fig_gauge(prob, UM_LR), texto, F.fig_contrib(contrib)
+
+
+# ---- 5.x Pestañas del benchmark ----
+@app.callback(Output("b-mapa", "figure"), Input("b-metrica", "value"), Input("b-opt", "value"))
+def b_mapa(metrica, opt):
+    return E.fig_mapa(metrica, opt)
+
+
+@app.callback(Output("b-rangos", "figure"), Input("b-factor", "value"))
+def b_rangos(factor):
+    return E.fig_rangos(factor)
+
+
+@app.callback(Output("b-tabla", "children"), Input("b-f-modelo", "value"), Input("b-f-bal", "value"), Input("b-f-opt", "value"))
+def b_tabla(mod, bal, opt):
+    m = E.E3["maestra"]
+    if mod: m = m[m["modelo"].isin(mod)]
+    if bal: m = m[m["balanceo"].isin(bal)]
+    if opt: m = m[m["optimizador"].isin(opt)]
+    cols = ["modelo", "balanceo", "optimizador", "PR_AUC_media", "PR_AUC_sd", "ROC_AUC_media", "Brier_media", "ECE_media", "Recall_05_media",
+            "evals", "semilla_global", "semillas_por_fold", "t_total_min", "hiperparametros_finales_por_fold"]
+    d = m[cols].sort_values("PR_AUC_media", ascending=False).round(4)
+    t = _tabla(d, tam=12, style_cell_conditional=[{"if": {"column_id": "hiperparametros_finales_por_fold"}, "maxWidth": "260px", "whiteSpace": "nowrap",
+                                                    "overflow": "hidden", "textOverflow": "ellipsis"}])
+    t.tooltip_data = [{"hiperparametros_finales_por_fold": {"value": str(r["hiperparametros_finales_por_fold"]), "type": "text"}} for r in d.to_dict("records")]
+    t.tooltip_duration = None
+    return t
+
+
+@app.callback(Output("o-conv", "figure"), Output("o-pareto", "figure"), Output("o-comp", "figure"), Input("tabs", "active_tab"))
+def o_figs(_):
+    return E.fig_convergencia(), E.fig_pareto(), E.fig_complejidad()
+
+
+@app.callback(Output("f-calib", "figure"), Output("f-imp", "figure"), Output("f-lime", "figure"), Input("tabs", "active_tab"))
+def f_figs(_):
+    return E.fig_calibracion_balanceo(), E.fig_importancia(), E.fig_lime()
+
+
+@app.callback(Output("r-tabla", "children"), Input("r-an", "value"))
+def r_tabla(an):
+    return _tabla(E.tabla_robustez(an), tam=14)
 
 
 if __name__ == "__main__":

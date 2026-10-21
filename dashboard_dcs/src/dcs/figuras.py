@@ -9,7 +9,7 @@ Convenciones
 * Fondo claro (crema / blanco), tipografía DM Sans y una paleta de tierras con acento teal.
 * Cada función recibe datos ya filtrados (``df``) o los artefactos de ``calculos.py`` (``A``)
   y devuelve un ``plotly.graph_objects.Figure``.
-* ``separators=",."`` hace que los decimales se vean con coma, como en el Entregable 1.
+* ``separators=",."`` hace que los decimales se vean con coma, como en el libro.
 
 Secciones
 ---------
@@ -104,7 +104,7 @@ def orden_categorias(var: str, cats_modelo: dict | None = None):
 # 2. PESTAÑA 1 · CONTEXTO DEL PROBLEMA
 # ---------------------------------------------------------------------------
 def fig_flujo_muestra() -> go.Figure:
-    """Diagrama de Sankey con el recorrido de la muestra (cifras del capítulo 1 del Entregable 1)."""
+    """Diagrama de Sankey con el recorrido de la muestra (cifras del capítulo 1 del libro)."""
     nodos = ["Adultos NHIS 2022-2023 · 57.173", "Respondió un informante · 1.025", "Responden por sí mismos · 56.148",
              "Objetivo sin respuesta · 19", "Muestra analítica · 56.129", "Entrenamiento · 44.903", "Prueba reservada · 11.226"]
     colores = [C["teal"], C["terracota_claro"], C["teal_claro"], C["terracota_claro"], C["teal"], C["salvia"], C["dorado"]]

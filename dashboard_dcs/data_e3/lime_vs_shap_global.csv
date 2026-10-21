@@ -1,0 +1,16 @@
+,SHAP,LIME
+frecuencia_depresion,0.5016,0.0085
+depresion_dx,0.3361,0.0057
+edad,0.2941,0.0264
+dificultad_auditiva,0.2826,0.0045
+dificultad_visual,0.2463,0.0059
+educacion,0.1667,0.0027
+colesterol_alto,0.092,0.0026
+tabaquismo,0.0392,0.0016
+acv,0.0289,0.0005
+diabetes,0.0271,0.0006
+imc_categoria,0.0262,0.0016
+hipertension,0.0127,0.0008
+sexo,0.0109,0.0007
+raza_etnia,0.0093,0.0016
+indicador_faltante,0.0032,0.0006

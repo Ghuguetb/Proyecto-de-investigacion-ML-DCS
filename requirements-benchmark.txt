@@ -1,4 +1,4 @@
-# Entorno exacto con el que se corrio el benchmark del Entregable 3 (Python 3.13.16).
+# Entorno exacto con el que se corrió el benchmark del capítulo 5 (Python 3.13.16).
 # Semilla global: SEED = 42 (src/utils.py); la busqueda de cada fold externo usa 42 + indice del fold.
 # Los notebooks 01 a 04 se ejecutaron con las versiones de requirements.txt; este archivo es para los scripts de scripts/ y el notebook 05.
 numpy==2.5.3

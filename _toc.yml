@@ -5,6 +5,6 @@ chapters:
   - file: notebooks/02_eda
   - file: notebooks/03_fuga_y_preprocesamiento
   - file: notebooks/04_modelo_base
-  - file: notebooks/05_entregable3
+  - file: notebooks/05_benchmark
   - file: conclusiones
   - file: referencias

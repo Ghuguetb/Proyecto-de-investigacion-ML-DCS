@@ -1,0 +1,22 @@
+{
+ "LogReg": {
+  "penalty": "l2",
+  "C": 1.0129197956845732
+ },
+ "SVM": {
+  "C": 0.03148911647956861
+ },
+ "XGBoost": {
+  "n_estimators": 236,
+  "max_depth": 2,
+  "learning_rate": 0.055335937232365434,
+  "subsample": 0.6387875118993118,
+  "colsample_bytree": 0.7760977256675943
+ },
+ "EBM": {
+  "learning_rate": 0.00544818322296675,
+  "max_leaves": 2,
+  "interactions": 7,
+  "min_samples_leaf": 28
+ }
+}

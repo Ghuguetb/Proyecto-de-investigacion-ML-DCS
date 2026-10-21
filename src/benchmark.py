@@ -1,5 +1,5 @@
 """
-Entregable 3. Benchmark 7 modelos x 4 balanceos x 4 optimizadores con validacion cruzada anidada.
+Benchmark 7x4x4 con validacion cruzada anidada (capitulo 5): 7 modelos, 4 balanceos y 4 optimizadores.
 
 Reglas de no-fuga:
 - Todo el preprocesamiento (imputacion, splines, escalado, one-hot) y el balanceo (SMOTE/ADASYN)

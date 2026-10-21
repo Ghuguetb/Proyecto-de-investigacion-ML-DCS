@@ -1,0 +1,5 @@
+optimizador,evals,PR_AUC_interno,evals_hasta_cerca_del_optimo,t_busqueda_s,t_por_eval_s
+Bayesiana,11.9926,0.4821,4.4148,10.9719,0.9151
+Genetica,6.9111,0.4756,2.8889,6.1826,0.8273
+Grid,10.0741,0.4803,5.0,10.1079,0.91
+Random,11.9778,0.4791,4.2519,10.95,0.9151
