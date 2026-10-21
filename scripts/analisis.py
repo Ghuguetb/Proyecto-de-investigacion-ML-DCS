@@ -13,6 +13,8 @@ for f in sorted(TAR.glob("*.json")):
     r = json.loads(f.read_text()); r.pop("historia"); r.pop("diversidad_ga"); filas.append(r)
 fold = pd.DataFrame(filas)
 fold.to_csv(OUT / "resultados_por_fold.csv", index=False)
+ebm = fold[fold["modelo"] == "EBM"].copy()
+fold = fold[fold["modelo"] != "EBM"].copy()  # la rejilla 7x4x4 se analiza sin el modelo original
 llaves = ["modelo", "balanceo", "optimizador"]
 met = ["PR_AUC", "ROC_AUC", "Brier", "ECE", "F1_05", "Recall_05"]
 g = fold.groupby(llaves)
@@ -118,3 +120,19 @@ def cliff(a, b):
     return (np.sum(a[:, None] > b[None, :]) - np.sum(a[:, None] < b[None, :])) / (len(a) * len(b))
 ef = [(c, cliff(M[mejor], M[c])) for c in top if c in M.columns]
 pd.DataFrame(ef, columns=["combo", "cliffs_delta_mejor_vs"]).to_csv(OUT / "cliffs_delta.csv", index=False)
+
+# ---------------- 5. Modelo original (EBM) aparte -----------------
+if len(ebm) == 5:
+    print("\nEBM (modelo original, mismo nested CV):", ebm[["PR_AUC", "ROC_AUC", "Brier", "ECE"]].mean().round(4).to_dict())
+    pe = cargar_oof("EBM|sin_balanceo|Bayesiana")
+    filas = []
+    ref = {"mejor_PR_AUC": mejor,
+           "mejor_LogReg": maestra[maestra["modelo"] == "LogReg"].assign(c=lambda d: d.modelo + "|" + d.balanceo + "|" + d.optimizador).iloc[0]["c"],
+           "mejor_XGBoost": maestra[maestra["modelo"] == "XGBoost"].assign(c=lambda d: d.modelo + "|" + d.balanceo + "|" + d.optimizador).iloc[0]["c"]}
+    for nombre, c in ref.items():
+        d, pv = delong_p(y, pe, cargar_oof(c))
+        delta = cliff(ebm["PR_AUC"].values, M[c].values)
+        filas.append((nombre, c, d, pv, delta))
+    de = pd.DataFrame(filas, columns=["referencia", "combo", "dif_AUC_EBM_menos_ref", "p", "cliffs_delta_PR_AUC"])
+    de["p_Holm"] = holm(de["p"]); de.to_csv(OUT / "ebm_vs_referencias.csv", index=False)
+    print(de.round(4).to_string(index=False))
