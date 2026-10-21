@@ -13,7 +13,8 @@ proyecto_nhis_cognicion/
 │   ├── 01_base_de_datos.ipynb           Sección 1 de la guía
 │   ├── 02_eda.ipynb                     Secciones 2.1–2.4 y 2.6–2.8
 │   ├── 03_fuga_y_preprocesamiento.ipynb Secciones 2.5 y 2.9
-│   └── 04_modelo_base.ipynb             Sección 3
+│   ├── 04_modelo_base.ipynb             Sección 3
+│   └── 05_entregable3.ipynb             Entregable 3: benchmark 7x4x4, EBM, estadística, robustez
 ├── src/
 │   ├── utils.py               Carga, recodificación (codebook), diccionario, partición, SEED = 42
 │   └── preprocesamiento.py    Pipeline de scikit-learn
