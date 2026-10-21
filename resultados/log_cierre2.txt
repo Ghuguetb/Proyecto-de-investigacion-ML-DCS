@@ -1,0 +1,2 @@
+{'config': 'KNN brute', 't_fit_s': 0.024010419845581055, 't_pred_s': 0.812885046005249, 'mem_extra_MB': 17.65625, 'PR_AUC': 0.4317712324486879, 'entrenamiento': 'O(1) entrenar; O(n·p) por consulta', 'memoria_modelo': 'O(n·p)'}
+{'config': 'KNN kd_tree', 't_fit_s': 0.1273951530456543, 't_pred_s': 2.5661461353302, 'mem_extra_MB': 18.2734375, 'PR_AUC': 0.43398982605168995, 'entrenamiento': 'O(n·p·log n) construir; O(log n) por consulta en baja dimensión', 'memoria_modelo': 'O(n·p)'}

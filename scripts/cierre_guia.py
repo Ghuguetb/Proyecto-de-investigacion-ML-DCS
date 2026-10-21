@@ -172,9 +172,14 @@ TEORIA = {"KNN brute": ("O(1) entrenar; O(n·p) por consulta", "O(n·p)"), "KNN 
 
 
 def _hijo(nombre):
-    import resource
     from sklearn.metrics import average_precision_score
-    d = np.load(os.environ["MATRIZ"]); Xa, ya, Xb, yb = d["Xa"], d["ya"], d["Xb"], d["yb"]; base = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+
+    def pico_mb():
+        """Pico de memoria residente del proceso (VmHWM), que no hereda el pico del proceso padre."""
+        for l in open('/proc/self/status'):
+            if l.startswith('VmHWM'): return int(l.split()[1]) / 1024
+
+    d = np.load(os.environ["MATRIZ"]); Xa, ya, Xb, yb = d["Xa"], d["ya"], d["Xb"], d["yb"]; base = pico_mb()
     from sklearn.neighbors import KNeighborsClassifier; from sklearn.linear_model import LogisticRegression, SGDClassifier; from sklearn.svm import SVC, LinearSVC; from sklearn.naive_bayes import GaussianNB
     from xgboost import XGBClassifier
     M = {"KNN brute": lambda: KNeighborsClassifier(15, algorithm="brute"), "KNN kd_tree": lambda: KNeighborsClassifier(15, algorithm="kd_tree"),
@@ -189,7 +194,7 @@ def _hijo(nombre):
     else: m.fit(Xa, ya)
     tf = time.time() - t0; t0 = time.time()
     s = m.predict_proba(Xb)[:, 1] if hasattr(m, "predict_proba") else m.decision_function(Xb); tp = time.time() - t0
-    print(json.dumps({"config": nombre, "t_fit_s": tf, "t_pred_s": tp, "mem_extra_MB": (resource.getrusage(resource.RUSAGE_SELF).ru_maxrss - base) / 1024, "PR_AUC": average_precision_score(yb, s)}))
+    print(json.dumps({"config": nombre, "t_fit_s": tf, "t_pred_s": tp, "mem_extra_MB": pico_mb() - base, "PR_AUC": average_precision_score(yb, s)}))
 
 
 def paso_complejidad():
