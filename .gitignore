@@ -1,2 +1,3 @@
 __pycache__/
 *.pyc
+resultados/tareas/  # TEMPORAL mientras corre el benchmark; se quita al final y se sube todo
