@@ -1,0 +1,28 @@
+540 tareas
+[Parallel(n_jobs=2)]: Using backend LokyBackend with 2 concurrent workers.
+[Parallel(n_jobs=2)]: Done  14 tasks      | elapsed:  3.2min
+[W 2026-10-21 00:46:23,309] Trial 0 failed with parameters: {'var_smoothing': 2.3488812958533085e-08} because of the following error: The value nan is not acceptable.
+[W 2026-10-21 00:46:23,309] Trial 0 failed with value nan.
+[W 2026-10-21 00:46:23,560] Trial 1 failed with parameters: {'var_smoothing': 0.003601046734447541} because of the following error: The value nan is not acceptable.
+[W 2026-10-21 00:46:23,560] Trial 1 failed with value nan.
+[W 2026-10-21 00:46:23,833] Trial 2 failed with parameters: {'var_smoothing': 3.87209029537042e-05} because of the following error: The value nan is not acceptable.
+[W 2026-10-21 00:46:23,833] Trial 2 failed with value nan.
+[W 2026-10-21 00:46:24,094] Trial 3 failed with parameters: {'var_smoothing': 2.443016261426142e-06} because of the following error: The value nan is not acceptable.
+[W 2026-10-21 00:46:24,094] Trial 3 failed with value nan.
+[W 2026-10-21 00:46:24,383] Trial 4 failed with parameters: {'var_smoothing': 2.536108116647138e-10} because of the following error: The value nan is not acceptable.
+[W 2026-10-21 00:46:24,383] Trial 4 failed with value nan.
+[W 2026-10-21 00:46:24,646] Trial 5 failed with parameters: {'var_smoothing': 2.5348407664333433e-10} because of the following error: The value nan is not acceptable.
+[W 2026-10-21 00:46:24,647] Trial 5 failed with value nan.
+[W 2026-10-21 00:46:24,928] Trial 6 failed with parameters: {'var_smoothing': 3.332364578819262e-11} because of the following error: The value nan is not acceptable.
+[W 2026-10-21 00:46:24,928] Trial 6 failed with value nan.
+[W 2026-10-21 00:46:25,178] Trial 7 failed with parameters: {'var_smoothing': 0.0006245760287469894} because of the following error: The value nan is not acceptable.
+[W 2026-10-21 00:46:25,178] Trial 7 failed with value nan.
+[W 2026-10-21 00:46:25,422] Trial 8 failed with parameters: {'var_smoothing': 2.5706035661175987e-06} because of the following error: The value nan is not acceptable.
+[W 2026-10-21 00:46:25,423] Trial 8 failed with value nan.
+[W 2026-10-21 00:46:25,667] Trial 9 failed with parameters: {'var_smoothing': 2.3585940584142686e-05} because of the following error: The value nan is not acceptable.
+[W 2026-10-21 00:46:25,667] Trial 9 failed with value nan.
+[W 2026-10-21 00:46:25,919] Trial 10 failed with parameters: {'var_smoothing': 1.5320059381854046e-11} because of the following error: The value nan is not acceptable.
+[W 2026-10-21 00:46:25,920] Trial 10 failed with value nan.
+[W 2026-10-21 00:46:26,169] Trial 11 failed with parameters: {'var_smoothing': 0.005360294728728286} because of the following error: The value nan is not acceptable.
+[W 2026-10-21 00:46:26,169] Trial 11 failed with value nan.
+[Parallel(n_jobs=2)]: Done  68 tasks      | elapsed:  6.8min
