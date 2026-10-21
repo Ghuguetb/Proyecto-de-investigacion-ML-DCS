@@ -84,6 +84,6 @@ costo computacional, y el resultado final con interpretabilidad y robustez.
   hiperparámetros finales, métricas, tiempo y semilla, y `resultados/tareas/` guarda cada una de las
   540 tareas.
 - Orden de ejecución: notebooks 01 a 04 en ese orden. Para el capítulo 5, `scripts/run_benchmark.py`,
-  `scripts/run_ebm.py`, `scripts/analisis.py`, `scripts/finales.py`, `scripts/complejidad.py` y
-  `scripts/lime_vs_shap.py`, y luego el notebook 05. Después `jupyter-book build .` genera este
+  `scripts/run_ebm.py`, `scripts/analisis.py`, `scripts/finales.py`, `scripts/complejidad.py`,
+  `scripts/lime_vs_shap.py` y `scripts/cierre_guia.py`, y luego el notebook 05. Después `jupyter-book build .` genera este
   informe en `_build/html/index.html`.
