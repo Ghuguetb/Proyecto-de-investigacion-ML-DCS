@@ -39,7 +39,7 @@ pip install -r requirements.txt
 # Ejecutar en orden: notebooks/01 → 02 → 03 → 04 (Run All en VS Code)
 # Capítulo 5 (otro entorno, Python 3.13): pip install -r requirements-benchmark.txt
 python scripts/run_benchmark.py && python scripts/run_ebm.py && python scripts/analisis.py 20
-python scripts/finales.py && python scripts/complejidad.py && python scripts/lime_vs_shap.py
+python scripts/finales.py && python scripts/complejidad.py && python scripts/lime_vs_shap.py && python scripts/cierre_guia.py
 # Luego ejecutar notebooks/05_benchmark.ipynb
 jupyter-book build .
 # Abrir _build/html/index.html

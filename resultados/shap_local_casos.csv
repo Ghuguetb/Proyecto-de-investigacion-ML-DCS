@@ -1,0 +1,3 @@
+caso,indice_test,prob_predicha,edad,sexo,raza_etnia,educacion,hipertension,colesterol_alto,diabetes,acv,depresion_dx,frecuencia_depresion,dificultad_auditiva,dificultad_visual,tabaquismo,imc_categoria
+acierto,8971,0.896,49.0,Mujer,Negro no hispano,Menos que secundaria,Sí,Sí,Sí,Sí,Sí,Diaria,Alguna,Alguna,Nunca fumó,Obesidad
+error,11189,0.046,49.0,Hombre,Negro no hispano,Posgrado,No,No,No,No,No,Nunca,Ninguna,Ninguna,Nunca fumó,Sobrepeso

@@ -1,0 +1,11 @@
+shap_local ok 0.896 0.046
+recal LogReg class_weight
+recal LogReg SMOTE
+recal XGBoost class_weight
+recal XGBoost SMOTE
+recalibracion ok
+semilla modelos 42
+semilla modelos 43
+semilla modelos 44
+semilla modelos 45
+semilla modelos 46

@@ -39,6 +39,7 @@ def categorias_finales():
 
 
 def agrupar_raras(X):
+    """Agrupa las categorias raras (< 1 % en entrenamiento) segun AGRUPACION_RARAS. Parameters: X, matriz de predictoras categoricas. Returns: DataFrame."""
     X = pd.DataFrame(X, columns=PREDICTORAS_CAT).copy()
     for v, mapeo in AGRUPACION_RARAS.items():
         X[v] = X[v].replace(mapeo)

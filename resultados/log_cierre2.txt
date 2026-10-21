@@ -1,0 +1,13 @@
+{'config': 'KNN brute', 't_fit_s': 0.024010419845581055, 't_pred_s': 0.812885046005249, 'mem_extra_MB': 17.65625, 'PR_AUC': 0.4317712324486879, 'entrenamiento': 'O(1) entrenar; O(n·p) por consulta', 'memoria_modelo': 'O(n·p)'}
+{'config': 'KNN kd_tree', 't_fit_s': 0.1273951530456543, 't_pred_s': 2.5661461353302, 'mem_extra_MB': 18.2734375, 'PR_AUC': 0.43398982605168995, 'entrenamiento': 'O(n·p·log n) construir; O(log n) por consulta en baja dimensión', 'memoria_modelo': 'O(n·p)'}
+{'config': 'XGBoost exact', 't_fit_s': 6.6346962451934814, 't_pred_s': 0.016357898712158203, 'mem_extra_MB': 37.96875, 'PR_AUC': 0.5357036311811748, 'entrenamiento': 'O(T·d·n·p·log n)', 'memoria_modelo': 'O(T·d)'}
+{'config': 'XGBoost hist', 't_fit_s': 0.4750955104827881, 't_pred_s': 0.008528470993041992, 'mem_extra_MB': 25.59765625, 'PR_AUC': 0.535793460978333, 'entrenamiento': 'O(T·d·n·p) (más O(n·p) para el histograma)', 'memoria_modelo': 'O(T·d)'}
+{'config': 'LogReg lbfgs', 't_fit_s': 0.16713213920593262, 't_pred_s': 0.0009870529174804688, 'mem_extra_MB': 16.5546875, 'PR_AUC': 0.5549682001771494, 'entrenamiento': 'O(it·n·p)', 'memoria_modelo': 'O(p)'}
+{'config': 'LogReg liblinear', 't_fit_s': 0.13400483131408691, 't_pred_s': 0.0008769035339355469, 'mem_extra_MB': 24.09765625, 'PR_AUC': 0.5549273633381449, 'entrenamiento': 'O(it·n·p)', 'memoria_modelo': 'O(p)'}
+{'config': 'LogReg saga', 't_fit_s': 0.42677736282348633, 't_pred_s': 0.0011868476867675781, 'mem_extra_MB': 16.00390625, 'PR_AUC': 0.5548147891109673, 'entrenamiento': 'O(it·n·p), cada paso lineal en n y p', 'memoria_modelo': 'O(p)'}
+{'config': 'SVC rbf', 't_fit_s': 39.9586067199707, 't_pred_s': 3.2420029640197754, 'mem_extra_MB': 268.640625, 'PR_AUC': 0.5082883426777178, 'entrenamiento': 'entre O(n²·p) y O(n³)', 'memoria_modelo': 'O(n_sv·p)'}
+{'config': 'LinearSVC', 't_fit_s': 0.16092276573181152, 't_pred_s': 0.0009579658508300781, 'mem_extra_MB': 23.984375, 'PR_AUC': 0.5554478291499095, 'entrenamiento': 'O(it·n·p)', 'memoria_modelo': 'O(p)'}
+{'config': 'SGD hinge', 't_fit_s': 0.30440735816955566, 't_pred_s': 0.0008783340454101562, 'mem_extra_MB': 15.59375, 'PR_AUC': 0.4748380890088501, 'entrenamiento': 'O(it·n·p)', 'memoria_modelo': 'O(p)'}
+{'config': 'GaussianNB fit', 't_fit_s': 0.0485382080078125, 't_pred_s': 0.0030477046966552734, 'mem_extra_MB': 28.48828125, 'PR_AUC': 0.4629777492901743, 'entrenamiento': 'O(n·p)', 'memoria_modelo': 'O(c·p)'}
+{'config': 'GaussianNB partial_fit', 't_fit_s': 0.05212664604187012, 't_pred_s': 0.003646373748779297, 'mem_extra_MB': 17.21484375, 'PR_AUC': 0.4629777492901743, 'entrenamiento': 'O(n·p) por lote', 'memoria_modelo': 'O(c·p)'}
+complejidad ok (31432, 35)

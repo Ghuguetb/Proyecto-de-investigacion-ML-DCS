@@ -48,7 +48,12 @@ def cargar() -> dict:
         costo_m=_csv("costo_total_por_modelo_min"), costo_o=_csv("costo_total_por_optimizador_min"),
         calib=_csv("calibracion_por_modelo_balanceo"), lime=_csv("lime_vs_shap_global", index_col=0),
         robustez=_csv("robustez"), fried=_json("friedman_por_factor"), lime_j=_json("lime_vs_shap"),
-        spear=_json("acuerdo_importancias_spearman"))
+        spear=_json("acuerdo_importancias_spearman"),
+        sem_mod=_csv("semillas_modelos").groupby("modelo")["PR_AUC_cv"].agg(media="mean", desv="std", minimo="min", maximo="max").round(4).reset_index(),
+        sem_opt=_csv("semillas_optimizadores").groupby("optimizador").agg(PR_AUC_media=("mejor_PR_AUC_interno", "mean"), PR_AUC_sd=("mejor_PR_AUC_interno", "std"),
+                                                                        evals=("evals", "mean"), t_s=("t_s", "mean")).round(4).reset_index(),
+        cx=_csv("complejidad_estandar_vs_optimizada")[["config", "entrenamiento", "memoria_modelo", "t_fit_s", "t_pred_s", "mem_extra_MB", "PR_AUC"]],
+        fin=_csv("test_clasificacion_finalistas"), recal=_csv("recalibracion"))
     return D
 
 

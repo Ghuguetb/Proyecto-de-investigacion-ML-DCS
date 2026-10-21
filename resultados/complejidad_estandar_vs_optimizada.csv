@@ -1,0 +1,13 @@
+config,t_fit_s,t_pred_s,mem_extra_MB,PR_AUC,entrenamiento,memoria_modelo
+KNN brute,0.024,0.8129,17.6562,0.4318,O(1) entrenar; O(n·p) por consulta,O(n·p)
+KNN kd_tree,0.1274,2.5661,18.2734,0.434,O(n·p·log n) construir; O(log n) por consulta en baja dimensión,O(n·p)
+XGBoost exact,6.6347,0.0164,37.9688,0.5357,O(T·d·n·p·log n),O(T·d)
+XGBoost hist,0.4751,0.0085,25.5977,0.5358,O(T·d·n·p) (más O(n·p) para el histograma),O(T·d)
+LogReg lbfgs,0.1671,0.001,16.5547,0.555,O(it·n·p),O(p)
+LogReg liblinear,0.134,0.0009,24.0977,0.5549,O(it·n·p),O(p)
+LogReg saga,0.4268,0.0012,16.0039,0.5548,"O(it·n·p), cada paso lineal en n y p",O(p)
+SVC rbf,39.9586,3.242,268.6406,0.5083,entre O(n²·p) y O(n³),O(n_sv·p)
+LinearSVC,0.1609,0.001,23.9844,0.5554,O(it·n·p),O(p)
+SGD hinge,0.3044,0.0009,15.5938,0.4748,O(it·n·p),O(p)
+GaussianNB fit,0.0485,0.003,28.4883,0.463,O(n·p),O(c·p)
+GaussianNB partial_fit,0.0521,0.0036,17.2148,0.463,O(n·p) por lote,O(c·p)
