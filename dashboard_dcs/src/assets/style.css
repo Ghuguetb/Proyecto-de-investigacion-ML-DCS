@@ -1,0 +1,144 @@
+/* ==========================================================================
+   style.css · Dashboard DCS (Entregable 2)
+   Dash carga automáticamente todo lo que esté en la carpeta assets/.
+   Paleta: crema + tierras (terracota, teal, dorado). Fondo claro a propósito.
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+:root {
+  --crema: #F7F1E7;
+  --crema-2: #FBF7F0;
+  --arena: #E9DDC9;
+  --linea: #E6D9C3;
+  --terracota: #B9543A;
+  --terracota-osc: #8C2F39;
+  --teal: #2E6F77;
+  --teal-claro: #DCEBEC;
+  --dorado: #C99A3B;
+  --texto: #3A302A;
+  --suave: #8A7B6E;
+  /* Tema de los controles de Dash (casillas, sliders, desplegables) */
+  --Dash-Fill-Interactive-Strong: #B9543A;
+  --Dash-Fill-Interactive-Weak: #F6E3DA;
+  --Dash-Fill-Primary-Hover: #8C2F39;
+  --Dash-Fill-Primary-Active: #8C2F39;
+  --Dash-Text-Primary: #B9543A;
+}
+
+html, body { background: var(--crema); }
+body { font-family: 'DM Sans', Helvetica, Arial, sans-serif; color: var(--texto); }
+h1, h2, h3, .serif { font-family: 'Playfair Display', Georgia, serif; color: var(--texto); }
+
+/* ---------- Encabezado ---------- */
+.hero {
+  background: linear-gradient(120deg, #FFF9EF 0%, #F3E6D1 55%, #E9D7BC 100%);
+  border-bottom: 1px solid var(--linea);
+  padding: 26px 0 22px 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {            /* adorno geométrico discreto */
+  content: ""; position: absolute; right: -60px; top: -80px; width: 320px; height: 320px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(46,111,119,.18), rgba(46,111,119,0) 70%);
+}
+.hero .eyebrow { letter-spacing: .14em; text-transform: uppercase; font-size: 12px; color: var(--terracota); font-weight: 700; }
+.hero h1 { font-size: 30px; line-height: 1.2; margin: 6px 0 6px 0; font-weight: 700; max-width: 900px; }
+.hero .lead { color: #5b4d43; font-size: 15px; max-width: 820px; margin-bottom: 12px; }
+.chip {
+  display: inline-block; padding: 4px 12px; margin: 0 8px 6px 0; border-radius: 999px; font-size: 12.5px; font-weight: 500;
+  background: rgba(255,255,255,.75); border: 1px solid var(--linea); color: var(--texto);
+}
+.chip.autor { background: #fff; border-color: var(--teal); color: var(--teal); font-weight: 600; }
+
+/* ---------- Pestañas ---------- */
+.nav-tabs { border-bottom: 2px solid var(--linea); margin: 18px 0 6px 0; }
+.nav-tabs .nav-link {
+  border: none; color: var(--suave); font-weight: 600; font-size: 15px; padding: 11px 22px; background: transparent;
+  border-bottom: 3px solid transparent; margin-bottom: -2px;
+}
+.nav-tabs .nav-link:hover { color: var(--terracota); }
+.nav-tabs .nav-link.active { color: var(--terracota); background: transparent; border-bottom: 3px solid var(--terracota); }
+
+/* ---------- Tarjetas ---------- */
+.card-x {
+  background: #fff; border: 1px solid var(--linea); border-radius: 14px; padding: 14px 16px 10px 16px; margin-bottom: 18px;
+  box-shadow: 0 1px 2px rgba(90,70,50,.04), 0 6px 18px rgba(90,70,50,.05);
+}
+.card-x .card-h { font-weight: 700; font-size: 15px; margin-bottom: 4px; color: var(--texto); }
+.card-x.acento { border-left: 5px solid var(--terracota); }
+.card-x.acento-teal { border-left: 5px solid var(--teal); }
+.card-x.suave { background: var(--crema-2); }
+.nota { font-size: 12.5px; color: var(--suave); margin: 2px 4px 8px 4px; line-height: 1.45; }
+.nota b { color: var(--texto); }
+
+.seccion { margin: 26px 0 12px 0; }
+.seccion h2 { font-size: 23px; margin: 0; font-weight: 600; }
+.seccion p { color: var(--suave); margin: 2px 0 0 0; font-size: 14px; max-width: 880px; }
+.seccion .barra { width: 54px; height: 4px; background: var(--terracota); border-radius: 4px; margin-top: 8px; }
+
+/* ---------- KPIs ---------- */
+.kpi {
+  background: #fff; border: 1px solid var(--linea); border-radius: 14px; padding: 12px 14px; height: 100%;
+  box-shadow: 0 1px 2px rgba(90,70,50,.04), 0 6px 18px rgba(90,70,50,.05); position: relative; overflow: hidden;
+}
+.kpi::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--c, var(--terracota)); }
+.kpi .kpi-v { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; line-height: 1.1; color: var(--texto); }
+.kpi .kpi-l { font-size: 12.5px; font-weight: 600; color: var(--texto); margin-top: 2px; }
+.kpi .kpi-s { font-size: 11.5px; color: var(--suave); margin-top: 1px; }
+.kpi.teal { --c: var(--teal); } .kpi.dorado { --c: var(--dorado); } .kpi.osc { --c: var(--terracota-osc); }
+.kpi.salvia { --c: #7E9C84; } .kpi.ciruela { --c: #7A4B6B; }
+
+/* ---------- Texto de contexto ---------- */
+.pregunta {
+  background: linear-gradient(120deg, #2E6F77, #3B8089); color: #fff; border-radius: 14px; padding: 18px 22px;
+  font-family: 'Playfair Display', serif; font-size: 20px; line-height: 1.4; box-shadow: 0 8px 22px rgba(46,111,119,.22);
+}
+.pregunta small { display: block; font-family: 'DM Sans'; letter-spacing: .12em; text-transform: uppercase; font-size: 11px; opacity: .85; margin-bottom: 6px; }
+.lista-obj { padding-left: 0; list-style: none; margin: 4px 0 0 0; }
+.lista-obj li { position: relative; padding: 6px 0 6px 34px; font-size: 14px; border-bottom: 1px dashed var(--linea); }
+.lista-obj li:last-child { border-bottom: none; }
+.lista-obj li span.n {
+  position: absolute; left: 0; top: 6px; width: 24px; height: 24px; border-radius: 50%; background: var(--terracota); color: #fff;
+  font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.paso { text-align: center; padding: 10px 6px; }
+.paso .circulo {
+  width: 44px; height: 44px; border-radius: 50%; margin: 0 auto 6px auto; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: #fff; background: var(--teal);
+}
+.paso.actual .circulo { background: var(--terracota); box-shadow: 0 0 0 6px rgba(185,84,58,.18); }
+.paso.futuro .circulo { background: #C9BDAE; }
+.paso .t { font-weight: 700; font-size: 14px; } .paso .d { font-size: 12.5px; color: var(--suave); }
+
+/* ---------- Filtros del EDA ---------- */
+.filtros { position: sticky; top: 12px; }
+.filtros .card-x { padding: 14px 16px; }
+.filtros label.et { display: block; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--suave); margin: 12px 0 4px 0; }
+.filtros .form-check, .filtros label { font-size: 14px; }
+.btn-dcs {
+  background: var(--terracota); color: #fff; border: none; border-radius: 10px; padding: 8px 14px; font-weight: 600; font-size: 13.5px; width: 100%;
+  margin-top: 8px; cursor: pointer;
+}
+.btn-dcs:hover { background: var(--terracota-osc); }
+.btn-dcs.sec { background: #fff; color: var(--terracota); border: 1px solid var(--terracota); }
+.btn-dcs.sec:hover { background: #FBEDE6; }
+.btn-dcs.chico { width: auto; padding: 6px 12px; margin-right: 6px; }
+
+/* ---------- Controles ---------- */
+.ctrl-et { font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--suave); margin-bottom: 4px; }
+.ctrl-fila { background: #fff; border: 1px solid var(--linea); border-radius: 14px; padding: 12px 16px; margin-bottom: 16px; }
+.aviso {
+  background: #FFF6E3; border: 1px solid #EBD39B; color: #6b5420; border-radius: 10px; padding: 8px 12px; font-size: 12.5px; margin-top: 8px;
+}
+.resultado-sim { font-size: 14.5px; line-height: 1.5; }
+.resultado-sim b { color: var(--terracota); }
+
+/* ---------- Tablas ---------- */
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner td,
+.dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner th { font-family: 'DM Sans', sans-serif; }
+
+/* ---------- Pie ---------- */
+.pie { color: var(--suave); font-size: 12.5px; padding: 18px 0 30px 0; border-top: 1px solid var(--linea); margin-top: 24px; }
+
+/* Responsive */
+@media (max-width: 992px) { .filtros { position: static; } .hero h1 { font-size: 24px; } }
