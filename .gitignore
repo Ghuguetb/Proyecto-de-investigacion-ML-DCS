@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 # TEMPORAL mientras corre el benchmark; se quita al final y se sube todo
 resultados/tareas/
+resultados/log_benchmark.txt
