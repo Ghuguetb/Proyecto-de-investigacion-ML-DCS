@@ -1,0 +1,4 @@
+referencia,combo,dif_AUC_EBM_menos_ref,p,cliffs_delta_PR_AUC,p_Holm
+mejor_PR_AUC,SVM|sin_balanceo|Grid,-0.00017786430359045813,0.6609117979121609,-0.04,1.0
+mejor_LogReg,LogReg|sin_balanceo|Random,-2.981634097976027e-05,0.9253279491140576,0.12,1.0
+mejor_XGBoost,XGBoost|class_weight|Bayesiana,0.0014630924446019655,0.005313432448905776,-0.04,0.015940297346717328

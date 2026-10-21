@@ -1,0 +1,15 @@
+modelo,exponente_empirico_fit
+DecisionTree,0.92
+EBM,0.58
+KNN (brute),0.53
+KNN (kd_tree),1.1
+LinearSVC,1.13
+LogReg (lbfgs),0.99
+LogReg (liblinear),0.98
+LogReg (saga),0.98
+NaiveBayes,0.81
+RandomForest,0.7
+SGD (hinge),1.15
+SVC (kernel rbf),2.23
+XGBoost (exact),1.08
+XGBoost (hist),0.58

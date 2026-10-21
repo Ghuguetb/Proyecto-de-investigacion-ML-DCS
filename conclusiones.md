@@ -2,7 +2,7 @@
 
 ## Respuesta a la pregunta de investigación
 
-Los factores de riesgo modificables de demencia y el antecedente de ACV contienen información real pero limitada para identificar a los adultos con DCS. Una regresión logística con esas variables alcanza en datos no vistos una PR-AUC de 0,538 (2,6 veces la referencia trivial de 0,206) y un ROC-AUC de 0,804, detecta el 63,7 % de los casos con una precisión del 46,1 % y entrega probabilidades bien calibradas. El problema es aprendible, pero está lejos de resolverse del todo con un modelo lineal aditivo.
+Los factores de riesgo modificables de demencia y el antecedente de ACV contienen información real pero limitada para identificar a los adultos con DCS. Una regresión logística con esas variables alcanza en datos no vistos una PR-AUC de 0,538 (2,6 veces la referencia trivial de 0,206) y un ROC-AUC de 0,804, detecta el 63,7 % de los casos con una precisión del 46,1 % y entrega probabilidades bien calibradas. El benchmark del capítulo 5 muestra que ese valor es un techo y no un punto de partida. Ninguno de los siete modelos, de las cuatro técnicas de balanceo ni de los cuatro optimizadores lo supera de forma estadísticamente significativa, ni siquiera el modelo original (EBM), que lo iguala con una PR-AUC de 0,544 y es interpretable de forma nativa. El problema es aprendible, pero lo que limita el desempeño es la información de las 14 predictoras y no la complejidad del modelo.
 
 ## Hallazgos principales
 
@@ -13,6 +13,10 @@ Los factores de riesgo modificables de demencia y el antecedente de ACV contiene
 5. El ACV es un factor independiente, con un OR crudo de 3,36, ajustado por edad de 2,52 y ajustado por todas las variables de 1,69. Su efecto es mucho mayor en adultos jóvenes que en mayores de 75 años.
 6. La escolaridad es protectora, con un gradiente claro (OR de 0,53 para posgrado frente a menos que secundaria), coherente con la hipótesis de la reserva cognitiva.
 7. La hipertensión pierde su asociación una vez que se ajusta por edad y por los demás factores.
+8. Con 108 combinaciones evaluadas con validación anidada, el desempeño se estanca en una PR-AUC cercana a 0,52 en validación y 0,54 en la prueba. La regresión logística, la SVM lineal, XGBoost y el EBM no se distinguen entre sí (DeLong con corrección de Holm).
+9. El balanceo con SMOTE, ADASYN o pesos de clase sube el recall de 0,25 a cerca de 0,6 con el umbral de 0,5, pero no mejora la discriminación y deteriora la calibración, con un error de calibración que pasa de cerca de 0,02 a más de 0,2 en la logística.
+10. SHAP sobre XGBoost, los coeficientes de la logística y el EBM señalan las mismas variables, con la frecuencia de síntomas depresivos, el diagnóstico de depresión y la edad al frente. LIME coincide en lo grueso (Spearman global de 0,82), pero es menos estable que SHAP.
+11. El modelo es razonablemente robusto. Pierde poco con ruido leve, con datos faltantes y al entrenar con 2022 y probar con 2023, pero discrimina peor en mayores de 74 años (ROC-AUC de 0,73).
 
 ## Decisiones metodológicas clave
 
@@ -21,18 +25,24 @@ Los factores de riesgo modificables de demencia y el antecedente de ACV contiene
 - Uso de la categoría de IMC en lugar del IMC numérico, por el faltante de tipo MNAR de este último.
 - Descarte del accuracy como métrica de decisión, ya que el modelo trivial obtiene 0,794 sin detectar un solo caso.
 - Umbral de decisión de 0,246, elegido con predicciones out-of-fold del entrenamiento.
+- Validación cruzada anidada con todo el preprocesamiento y el remuestreo dentro de cada fold, y conjunto de prueba usado una sola vez, solo con los finalistas.
+- Comparación estadística jerárquica (Friedman, Nemenyi por factor y DeLong con Holm), declarando que con cinco folds el Nemenyi global no tiene potencia.
 
 ## Limitaciones
 
 - Diseño transversal, las asociaciones no son causales, y la relación entre depresión y DCS probablemente es bidireccional.
 - Autorreporte, tanto el objetivo como los diagnósticos dependen de la percepción y del acceso previo a servicios de salud.
 - Cobertura parcial del marco Lancet, con 9 de los 14 factores disponibles en ambos años, y faltan alcohol, inactividad física, aislamiento social, traumatismo craneoencefálico y contaminación del aire.
-- Representatividad, la muestra sobrerrepresenta a los mayores de 65 años, excluye a la población institucionalizada y a quienes necesitaron un informante, y el modelo no usa pesos muestrales.
+- Representatividad, la muestra sobrerrepresenta a los mayores de 65 años, excluye a la población institucionalizada y a quienes necesitaron un informante, y el modelo no usa pesos muestrales. Los intervalos de confianza no incorporan el diseño muestral complejo de la NHIS. Ponderar la evaluación cambia poco la discriminación, pero no reemplaza un análisis con ese diseño.
+- Presupuesto de búsqueda, los hiperparámetros se buscaron sobre submuestras de 8.000 filas con unas 12 evaluaciones por búsqueda, y la genética hizo menos evaluaciones (6,9), así que su comparación con los demás optimizadores no es del todo justa.
+- Las 28 combinaciones de regresión del diseño original no se ejecutaron, porque con un desenlace binario las métricas y los supuestos de regresión no aplican. La regresión logística, con penalización L1 y L2, cubre ese papel.
+- La brecha de literatura sobre el EBM aplicado a DCS con datos de encuesta es una observación sobre las búsquedas que hicimos y no una prueba de que no exista trabajo previo.
 - Validez externa, los datos son de EE. UU., así que aplicar el modelo en otra población, por ejemplo Colombia, requeriría validarlo localmente primero.
 
-## Próximos pasos para las siguientes entregas
+## Próximos pasos
 
-1. Modelos no lineales, como árboles, random forest o gradient boosting, capaces de aprender las interacciones detectadas (ACV con edad, perfiles afectivo y cardiometabólico).
-2. Análisis de sensibilidad sin las variables en observación (síntomas depresivos y dificultades sensoriales) para cuantificar el posible sesgo de estilo de respuesta.
-3. Evaluación de equidad del desempeño por sexo, grupo de edad y raza o etnia.
-4. Explorar, solo con los datos de 2022, el aporte de alcohol, actividad física y sueño.
+1. Incorporar el diseño muestral de la NHIS (pesos, estratos y conglomerados) en los intervalos y en la evaluación.
+2. Añadir variables clínicas y de estilo de vida que hoy faltan, como alcohol, actividad física y sueño, que están disponibles solo en 2022, y evaluar si rompen el techo de 0,54.
+3. Estudiar por qué el modelo discrimina peor en mayores de 74 años y si conviene un modelo específico para ese grupo.
+4. Calibrar y validar el modelo en una población local, por ejemplo colombiana, antes de cualquier uso de tamizaje, y fijar el umbral según el costo de las falsas alarmas.
+5. Repetir el benchmark con más presupuesto de búsqueda y con SMOTE-NC para variables categóricas.

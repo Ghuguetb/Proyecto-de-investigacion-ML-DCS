@@ -1,0 +1,9 @@
+modelo,t_total_s
+DecisionTree,6.4
+EBM,4.4
+KNN,16.6
+LogReg,11.6
+NaiveBayes,5.0
+RandomForest,29.3
+SVM,7.4
+XGBoost,23.8

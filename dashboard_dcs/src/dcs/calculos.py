@@ -1,7 +1,7 @@
 """
 calculos.py
 ===========
-Cálculos pesados del Entregable 2 (dashboard + JBook).
+Cálculos pesados del dashboard y del libro.
 
 Todo lo que tarda más de un par de segundos (entrenar los modelos, el bootstrap, la curva de
 aprendizaje, el PCA, etc.) se hace una sola vez aquí y se guarda en ``cache/artefactos.pkl``.
@@ -93,7 +93,7 @@ def prevalencia_por(df: pd.DataFrame, col, orden=None) -> pd.DataFrame:
 
 
 def metricas(y, p, yhat) -> dict:
-    """Las mismas ocho métricas del Entregable 1."""
+    """Las mismas ocho métricas del capítulo 4."""
     from sklearn.metrics import (accuracy_score, average_precision_score, balanced_accuracy_score,
                                  brier_score_loss, f1_score, precision_score, recall_score,
                                  roc_auc_score)
@@ -139,7 +139,7 @@ def _pipeline_svm(C=0.01):
 
 
 def entrenar_logistica(X_tr, y_tr, cv):
-    """Rejilla (C, class_weight) con PR-AUC como criterio, igual que el Entregable 1."""
+    """Rejilla (C, class_weight) con PR-AUC como criterio, igual que el capítulo 4 del libro."""
     from sklearn.model_selection import GridSearchCV
     rejilla = {"lr__C": [0.001, 0.01, 0.1, 1, 10], "lr__class_weight": [None, "balanced"]}
     bus = GridSearchCV(_pipeline_lr(), rejilla, cv=cv, n_jobs=-1, refit="PR-AUC",

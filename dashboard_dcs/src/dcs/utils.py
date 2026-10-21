@@ -1,5 +1,5 @@
 """
-Utilidades compartidas del proyecto (copiadas del Entregable 1, con la ruta de datos ajustada):
+Utilidades compartidas del proyecto (copiadas de src/utils.py del libro, con la ruta de datos ajustada):
 Dificultad cognitiva subjetiva y factores de riesgo modificables de demencia (NHIS 2022-2023).
 
 Todas las recodificaciones de este módulo provienen del codebook oficial de la NHIS
