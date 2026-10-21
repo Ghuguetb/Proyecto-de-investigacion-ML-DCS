@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np, pandas as pd
 from scipy import stats
 RAIZ = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(RAIZ))
 TAR = RAIZ / "resultados" / "tareas"; OUT = RAIZ / "resultados"
 
 # ---------------- 1. Tabla maestra -----------------
@@ -69,38 +70,9 @@ def cargar_oof(combo):
     idx, pr = np.concatenate(idx), np.concatenate(pr)
     o_ = np.argsort(idx); return pr[o_]
 
-def midrank(x):
-    j = np.argsort(x); z = x[j]; n = len(x); t = np.zeros(n); i = 0
-    while i < n:
-        a = i
-        while a < n and z[a] == z[i]: a += 1
-        t[i:a] = 0.5 * (i + a - 1) + 1; i = a
-    out = np.empty(n); out[j] = t; return out
-
-def delong_cov(y, preds):
-    pos = preds[:, y == 1]; neg = preds[:, y == 0]; m, n = pos.shape[1], neg.shape[1]; K = preds.shape[0]
-    tx = np.array([midrank(pos[r]) for r in range(K)]); ty = np.array([midrank(neg[r]) for r in range(K)])
-    tz = np.array([midrank(preds[r]) for r in range(K)])
-    aucs = tz[:, :0].sum(1)  # placeholder
-    aucs = np.array([(tz[r, y == 1].sum() - m * (m + 1) / 2) / (m * n) for r in range(K)])
-    v01 = (tz[:, y == 1] - tx) / n; v10 = 1 - (tz[:, y == 0] - ty) / m
-    s01 = np.cov(v01); s10 = np.cov(v10)
-    return aucs, s01 / m + s10 / n
-
-def delong_p(y, p1, p2):
-    aucs, S = delong_cov(y, np.vstack([p1, p2]))
-    var = S[0, 0] + S[1, 1] - 2 * S[0, 1]
-    z = (aucs[0] - aucs[1]) / np.sqrt(max(var, 1e-18))
-    return aucs[0] - aucs[1], 2 * stats.norm.sf(abs(z))
-
-def holm(pv):
-    pv = np.asarray(pv); o = np.argsort(pv); m = len(pv); adj = np.empty(m); run = 0
-    for r, i in enumerate(o):
-        run = max(run, (m - r) * pv[i]); adj[i] = min(1, run)
-    return adj
+from src.estadistica import delong_p, holm
 
 # y global en el orden original de train
-sys.path.insert(0, str(RAIZ))
 from src.utils import cargar_particiones, OBJETIVO
 y = cargar_particiones()[0][OBJETIVO].values
 orden = maestra.assign(combo=maestra["modelo"] + "|" + maestra["balanceo"] + "|" + maestra["optimizador"])["combo"].tolist()

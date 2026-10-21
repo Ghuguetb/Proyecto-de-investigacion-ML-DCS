@@ -1,0 +1,55 @@
+analisis,modelo_o_grupo,metrica,valor
+pesos_muestrales_en_evaluacion,LogReg,PR_AUC sin pesos,0.5384440870218361
+pesos_muestrales_en_evaluacion,LogReg,PR_AUC con pesos,0.5316610836900492
+pesos_muestrales_en_evaluacion,LogReg,Brier sin pesos,0.127662697393982
+pesos_muestrales_en_evaluacion,LogReg,Brier con pesos,0.12053377370105893
+pesos_muestrales_en_evaluacion,SVM,PR_AUC sin pesos,0.5372796033127729
+pesos_muestrales_en_evaluacion,SVM,PR_AUC con pesos,0.5295714432398566
+pesos_muestrales_en_evaluacion,SVM,Brier sin pesos,0.12805462678755883
+pesos_muestrales_en_evaluacion,SVM,Brier con pesos,0.12096296264423065
+pesos_muestrales_en_evaluacion,XGBoost,PR_AUC sin pesos,0.5405852551883632
+pesos_muestrales_en_evaluacion,XGBoost,PR_AUC con pesos,0.5316804239380755
+pesos_muestrales_en_evaluacion,XGBoost,Brier sin pesos,0.12772825360298157
+pesos_muestrales_en_evaluacion,XGBoost,Brier con pesos,0.12079932760827339
+pesos_muestrales_en_evaluacion,EBM,PR_AUC sin pesos,0.543569544306724
+pesos_muestrales_en_evaluacion,EBM,PR_AUC con pesos,0.5354901396038086
+pesos_muestrales_en_evaluacion,EBM,Brier sin pesos,0.12736997713636627
+pesos_muestrales_en_evaluacion,EBM,Brier con pesos,0.12031276915396645
+reajuste_con_pesos,LogReg,PR_AUC (eval. con pesos),0.5304335397420928
+reajuste_con_pesos,LogReg,Brier (eval. con pesos),0.12055320690980337
+umbral_LogReg,0.150,F1 / recall / precision,0.505 / 0.804 / 0.368
+umbral_LogReg,0.200,F1 / recall / precision,0.529 / 0.710 / 0.422
+umbral_LogReg,0.245 (F1 OOF),F1 / recall / precision,0.535 / 0.638 / 0.460
+umbral_LogReg,0.300,F1 / recall / precision,0.528 / 0.555 / 0.504
+umbral_LogReg,0.400,F1 / recall / precision,0.500 / 0.432 / 0.593
+umbral_LogReg,0.500,F1 / recall / precision,0.418 / 0.310 / 0.643
+faltantes,LogReg,ROC_AUC con algun faltante (n=701),0.8001502859097795
+faltantes,LogReg,ROC_AUC casos completos (n=10525),0.8041203299556892
+faltantes,SVM,ROC_AUC con algun faltante (n=701),0.8013476858413566
+faltantes,SVM,ROC_AUC casos completos (n=10525),0.8037241289766511
+faltantes,XGBoost,ROC_AUC con algun faltante (n=701),0.8012743756414643
+faltantes,XGBoost,ROC_AUC casos completos (n=10525),0.8047307093052809
+faltantes,EBM,ROC_AUC con algun faltante (n=701),0.7925748985875568
+faltantes,EBM,ROC_AUC casos completos (n=10525),0.8045286860337911
+perturbacion_de_entradas,LogReg,"ruido_leve (edad+-2, 5% cambiado) ROC_AUC",0.7918851018040284
+perturbacion_de_entradas,SVM,"ruido_leve (edad+-2, 5% cambiado) ROC_AUC",0.7893741598158833
+perturbacion_de_entradas,XGBoost,"ruido_leve (edad+-2, 5% cambiado) ROC_AUC",0.792790606064707
+perturbacion_de_entradas,EBM,"ruido_leve (edad+-2, 5% cambiado) ROC_AUC",0.7919241253301458
+perturbacion_de_entradas,LogReg,"ruido_fuerte (edad+-5, 15% cambiado) ROC_AUC",0.7624707572150231
+perturbacion_de_entradas,SVM,"ruido_fuerte (edad+-5, 15% cambiado) ROC_AUC",0.7567919327514131
+perturbacion_de_entradas,XGBoost,"ruido_fuerte (edad+-5, 15% cambiado) ROC_AUC",0.764366603706771
+perturbacion_de_entradas,EBM,"ruido_fuerte (edad+-5, 15% cambiado) ROC_AUC",0.7630115810863035
+subgrupos_LogReg,"edad=(17.0, 39.0] (n=3223)",ROC_AUC / Brier / prev. obs. / prev. pred.,0.807 / 0.109 / 0.164 / 0.172
+subgrupos_LogReg,"edad=(39.0, 59.0] (n=3365)",ROC_AUC / Brier / prev. obs. / prev. pred.,0.829 / 0.101 / 0.162 / 0.162
+subgrupos_LogReg,"edad=(59.0, 74.0] (n=3162)",ROC_AUC / Brier / prev. obs. / prev. pred.,0.762 / 0.144 / 0.221 / 0.226
+subgrupos_LogReg,"edad=(74.0, 90.0] (n=1455)",ROC_AUC / Brier / prev. obs. / prev. pred.,0.733 / 0.197 / 0.370 / 0.346
+subgrupos_LogReg,sexo=Hombre (n=5104),ROC_AUC / Brier / prev. obs. / prev. pred.,0.799 / 0.118 / 0.180 / 0.185
+subgrupos_LogReg,sexo=Mujer (n=6121),ROC_AUC / Brier / prev. obs. / prev. pred.,0.804 / 0.136 / 0.228 / 0.225
+subgrupos_LogReg,raza_etnia=Asiático no hispano (n=657),ROC_AUC / Brier / prev. obs. / prev. pred.,0.826 / 0.083 / 0.111 / 0.119
+subgrupos_LogReg,raza_etnia=Blanco no hispano (n=7375),ROC_AUC / Brier / prev. obs. / prev. pred.,0.798 / 0.136 / 0.223 / 0.223
+subgrupos_LogReg,raza_etnia=Hispano (n=1709),ROC_AUC / Brier / prev. obs. / prev. pred.,0.791 / 0.113 / 0.170 / 0.170
+subgrupos_LogReg,raza_etnia=Negro no hispano (n=1202),ROC_AUC / Brier / prev. obs. / prev. pred.,0.819 / 0.119 / 0.193 / 0.197
+subgrupos_LogReg,raza_etnia=Otro / múltiple (n=137),ROC_AUC / Brier / prev. obs. / prev. pred.,0.721 / 0.119 / 0.175 / 0.177
+temporal_2022_a_2023,LogReg,PR_AUC / ROC_AUC,0.515 / 0.791
+temporal_2022_a_2023,XGBoost,PR_AUC / ROC_AUC,0.516 / 0.789
+temporal_2022_a_2023,EBM,PR_AUC / ROC_AUC,0.516 / 0.791

@@ -1,0 +1,52 @@
+108 combinaciones en la tabla maestra (con KNN class_weight excluido por no aplicable)
+ modelo     balanceo optimizador  PR_AUC_media  PR_AUC_sd  ROC_AUC_media  Brier_media  t_total_min
+    SVM sin_balanceo        Grid         0.520      0.011          0.793        0.131        0.216
+    SVM sin_balanceo    Genetica         0.520      0.011          0.793        0.131        0.239
+    SVM sin_balanceo      Random         0.520      0.011          0.793        0.131        0.458
+    SVM sin_balanceo   Bayesiana         0.520      0.011          0.793        0.131        0.450
+XGBoost class_weight   Bayesiana         0.520      0.012          0.792        0.183        0.805
+ LogReg sin_balanceo      Random         0.519      0.012          0.793        0.131        0.588
+ LogReg sin_balanceo        Grid         0.519      0.012          0.793        0.131        0.487
+ LogReg sin_balanceo   Bayesiana         0.519      0.012          0.793        0.131        0.558
+ LogReg sin_balanceo    Genetica         0.519      0.012          0.793        0.131        0.274
+XGBoost sin_balanceo   Bayesiana         0.519      0.011          0.792        0.131        0.756
+
+Friedman (PR-AUC): k=108 combinaciones, N=5 folds, chi2=506.9, p=2.89e-53
+Diferencia critica de Nemenyi (alfa=0.05): CD = 85.9 rangos (con k=108, N=5)
+
+Factor modelo: chi2=28.46 p=7.7e-05 CD=4.03
+  rangos: {'LogReg': 1.2, 'SVM': 2.2, 'XGBoost': 2.6, 'RandomForest': 4.0, 'DecisionTree': 5.4, 'NaiveBayes': 5.6, 'KNN': 7.0}
+
+Factor balanceo: chi2=13.56 p=0.00357 CD=2.10
+  rangos: {'class_weight': 1.0, 'sin_balanceo': 2.0, 'SMOTE': 3.4, 'ADASYN': 3.6}
+
+Factor optimizador: chi2=8.76 p=0.0327 CD=2.10
+  rangos: {'Bayesiana': 1.4, 'Grid': 2.0, 'Random': 3.0, 'Genetica': 3.6}
+
+DeLong (ROC-AUC OOF) del mejor por PR-AUC (SVM|sin_balanceo|Grid) vs los 19 siguientes, con Holm:
+                         combo  dif_AUC_vs_mejor      p  p_Holm
+     SVM|sin_balanceo|Genetica            0.0000 0.5254  1.0000
+       SVM|sin_balanceo|Random            0.0000 0.2693  1.0000
+    SVM|sin_balanceo|Bayesiana            0.0000 0.1551  1.0000
+XGBoost|class_weight|Bayesiana            0.0016 0.0016  0.0254
+    LogReg|sin_balanceo|Random            0.0001 0.5987  1.0000
+      LogReg|sin_balanceo|Grid            0.0001 0.6170  1.0000
+ LogReg|sin_balanceo|Bayesiana            0.0002 0.5738  1.0000
+  LogReg|sin_balanceo|Genetica            0.0001 0.5966  1.0000
+XGBoost|sin_balanceo|Bayesiana            0.0027 0.0000  0.0000
+ LogReg|class_weight|Bayesiana           -0.0000 0.9457  1.0000
+      LogReg|class_weight|Grid           -0.0000 0.9871  1.0000
+    LogReg|class_weight|Random           -0.0000 0.9863  1.0000
+  LogReg|class_weight|Genetica           -0.0000 0.9926  1.0000
+     XGBoost|sin_balanceo|Grid            0.0027 0.0000  0.0002
+     XGBoost|class_weight|Grid            0.0033 0.0000  0.0000
+     SVM|class_weight|Genetica            0.0002 0.6291  1.0000
+    SVM|class_weight|Bayesiana            0.0002 0.6244  1.0000
+       SVM|class_weight|Random            0.0002 0.6202  1.0000
+         SVM|class_weight|Grid            0.0002 0.6237  1.0000
+
+EBM (modelo original, mismo nested CV): {'PR_AUC': 0.5197, 'ROC_AUC': 0.7933, 'Brier': 0.1307, 'ECE': 0.0159}
+   referencia                          combo  dif_AUC_EBM_menos_ref      p  cliffs_delta_PR_AUC  p_Holm
+ mejor_PR_AUC          SVM|sin_balanceo|Grid                -0.0002 0.6609                -0.04  1.0000
+ mejor_LogReg     LogReg|sin_balanceo|Random                -0.0000 0.9253                 0.12  1.0000
+mejor_XGBoost XGBoost|class_weight|Bayesiana                 0.0015 0.0053                -0.04  0.0159
