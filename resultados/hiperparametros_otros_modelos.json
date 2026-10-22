@@ -1,0 +1,21 @@
+{
+ "KNN": {
+  "n_neighbors": 88,
+  "weights": "uniform",
+  "p": 1
+ },
+ "NaiveBayes": {
+  "var_smoothing": 0.0074411887173055
+ },
+ "DecisionTree": {
+  "max_depth": 9,
+  "min_samples_leaf": 37,
+  "criterion": "gini"
+ },
+ "RandomForest": {
+  "n_estimators": 107,
+  "max_depth": 6,
+  "min_samples_leaf": 7,
+  "max_features": "sqrt"
+ }
+}
