@@ -53,7 +53,8 @@ def cargar() -> dict:
         sem_opt=_csv("semillas_optimizadores").groupby("optimizador").agg(PR_AUC_media=("mejor_PR_AUC_interno", "mean"), PR_AUC_sd=("mejor_PR_AUC_interno", "std"),
                                                                         evals=("evals", "mean"), t_s=("t_s", "mean")).round(4).reset_index(),
         cx=_csv("complejidad_estandar_vs_optimizada")[["config", "entrenamiento", "memoria_modelo", "t_fit_s", "t_pred_s", "mem_extra_MB", "PR_AUC"]],
-        fin=_csv("test_clasificacion_finalistas"), recal=_csv("recalibracion"))
+        fin=_csv("test_clasificacion_finalistas"), recal=_csv("recalibracion"),
+        todos=_csv("test_metricas_todos_modelos")[["modelo", "umbral", "Accuracy", "Precision", "Recall", "F1", "AUC", "PR_AUC"]])
     return D
 
 

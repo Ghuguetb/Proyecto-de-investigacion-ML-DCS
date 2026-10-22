@@ -529,6 +529,9 @@ def layout_final():
         tarjeta("Accuracy, precision, recall, F1 y AUC de los finalistas (prueba)", html.Div([_tabla(E.E3["fin"], tam=8),
                 html.Img(src="/assets/e3/confusion_roc_finalistas.png", style={"width": "100%", "marginTop": "14px"})]),
                 "Con el umbral 0,5 y con el 0,245 elegido en el entrenamiento. El criterio principal de validación fue la PR-AUC, porque con prevalencia de 20,6 % el accuracy engaña."),
+        tarjeta("Métricas de los ocho modelos (prueba)", html.Div([_tabla(E.E3["todos"], tam=8),
+                html.Img(src="/assets/e3/confusion_roc_todos.png", style={"width": "100%", "marginTop": "14px"})]),
+                "Random Forest, árbol, Naive Bayes y KNN se ajustaron con la misma receta sin balanceo y se evaluaron una sola vez. Es un reporte descriptivo: ninguna decisión se tomó con estos resultados."),
         dbc.Row([
             dbc.Col(tarjeta(None, grafica("f-calib"), "SMOTE, ADASYN y class_weight suben el recall pero el modelo deja de estimar la prevalencia real."), lg=6),
             dbc.Col(tarjeta(None, html.Img(src="/assets/e3/calibracion.png", style={"width": "100%"}), "Curvas de calibración de los finalistas en la prueba."), lg=6),
