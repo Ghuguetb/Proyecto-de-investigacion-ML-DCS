@@ -20,7 +20,7 @@ from .figuras import C, _estilo, fig_vacia
 DATA = Path(__file__).resolve().parents[2] / "data_e3"
 
 NOMBRES = {"LogReg": "Regresión logística", "SVM": "SVM lineal", "XGBoost": "XGBoost", "RandomForest": "Random Forest",
-           "DecisionTree": "Árbol de decisión", "NaiveBayes": "Naive Bayes", "KNN": "KNN", "EBM": "EBM (modelo original)"}
+           "DecisionTree": "Árbol de decisión", "NaiveBayes": "Naive Bayes", "KNN": "KNN", "EBM": "EBM (candidato interpretable)"}
 BAL_ORDEN = ["sin_balanceo", "class_weight", "SMOTE", "ADASYN"]
 OPT_ORDEN = ["Grid", "Random", "Bayesiana", "Genetica"]
 METRICAS = {"PR_AUC_media": "PR-AUC", "ROC_AUC_media": "ROC-AUC", "Brier_media": "Brier (menor es mejor)",

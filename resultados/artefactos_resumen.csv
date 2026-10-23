@@ -1,0 +1,9 @@
+modelo,balanceo,optimizador,tamano_MB
+SVM,sin_balanceo,Grid,0.0
+XGBoost,class_weight,Bayesiana,0.02
+LogReg,sin_balanceo,Random,0.0
+RandomForest,sin_balanceo,Random,0.72
+DecisionTree,sin_balanceo,Grid,0.02
+NaiveBayes,SMOTE,Grid,0.21
+KNN,sin_balanceo,Bayesiana,0.96
+AditivoPenalizado,sin_balanceo,Bayesiana,0.0

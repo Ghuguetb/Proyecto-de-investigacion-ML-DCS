@@ -1,0 +1,15 @@
+,SHAP_exacto_AditivoPenalizado,SHAP_XGBoost,EBM_importancia
+frecuencia_depresion,0.4258,0.5124,0.4256
+dificultad_auditiva,0.2548,0.2783,0.255
+depresion_dx,0.2435,0.3427,0.2386
+edad,0.2396,0.3046,0.2313
+dificultad_visual,0.2326,0.2554,0.2295
+educacion,0.1658,0.167,0.1664
+colesterol_alto,0.1077,0.0922,0.0962
+tabaquismo,0.0726,0.0374,0.0641
+sexo,0.0452,0.0115,0.0424
+imc_categoria,0.0442,0.026,0.0409
+acv,0.036,0.0368,0.0351
+diabetes,0.0315,0.0257,0.0294
+raza_etnia,0.0264,0.0101,0.0241
+hipertension,0.0161,0.0126,0.0268

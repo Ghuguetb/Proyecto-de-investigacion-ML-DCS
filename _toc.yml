@@ -1,10 +1,16 @@
 format: jb-book
 root: 00_intro
 chapters:
+  - file: trazabilidad
   - file: notebooks/01_base_de_datos
   - file: notebooks/02_eda
   - file: notebooks/03_fuga_y_preprocesamiento
   - file: notebooks/04_modelo_base
   - file: notebooks/05_benchmark
+  - file: literatura
+  - file: notebooks/06_modelo_original
+  - file: notebooks/07_validacion_estadistica
+  - file: dashboard
   - file: conclusiones
+  - file: reproducibilidad
   - file: referencias

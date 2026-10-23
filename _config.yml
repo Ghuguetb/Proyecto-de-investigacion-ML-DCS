@@ -23,3 +23,8 @@ parse:
   myst_enable_extensions:
     - dollarmath
     - colon_fence
+
+bibtex_bibfiles:
+  - references.bib
+
+exclude_patterns: [".pytest_cache", "_build", "README.md"]

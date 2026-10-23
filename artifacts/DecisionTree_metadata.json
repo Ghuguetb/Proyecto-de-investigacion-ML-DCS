@@ -1,0 +1,153 @@
+{
+ "modelo": "DecisionTree",
+ "balanceo": "sin_balanceo",
+ "optimizador": "Grid",
+ "semilla": 42,
+ "hiperparametros_finales": {
+  "max_depth": 12,
+  "min_samples_leaf": 50
+ },
+ "metricas_bucle_externo_media_sd": {
+  "PR_AUC": [
+   0.4775761240681917,
+   0.0157625571124556
+  ],
+  "ROC_AUC": [
+   0.7730399391364925,
+   0.0088787115278376
+  ],
+  "Brier": [
+   0.1356276477994026,
+   0.0022283737113594
+  ],
+  "ECE": [
+   0.0156116111334445,
+   0.0062868345353479
+  ]
+ },
+ "versiones": {
+  "python": "3.13.16",
+  "numpy": "2.5.3",
+  "pandas": "3.0.5",
+  "scikit-learn": "1.9.1",
+  "imbalanced-learn": "0.14.2",
+  "xgboost": "3.4.1",
+  "scipy": "1.18.1",
+  "joblib": "1.6.0"
+ },
+ "esquema_entrada": {
+  "columnas": [
+   "edad",
+   "sexo",
+   "raza_etnia",
+   "educacion",
+   "hipertension",
+   "colesterol_alto",
+   "diabetes",
+   "acv",
+   "depresion_dx",
+   "frecuencia_depresion",
+   "dificultad_auditiva",
+   "dificultad_visual",
+   "tabaquismo",
+   "imc_categoria"
+  ],
+  "tipos": {
+   "edad": "numerica",
+   "sexo": "categorica",
+   "raza_etnia": "categorica",
+   "educacion": "categorica",
+   "hipertension": "categorica",
+   "colesterol_alto": "categorica",
+   "diabetes": "categorica",
+   "acv": "categorica",
+   "depresion_dx": "categorica",
+   "frecuencia_depresion": "categorica",
+   "dificultad_auditiva": "categorica",
+   "dificultad_visual": "categorica",
+   "tabaquismo": "categorica",
+   "imc_categoria": "categorica"
+  },
+  "rango_edad": [
+   18,
+   85
+  ],
+  "categorias": {
+   "sexo": [
+    "Hombre",
+    "Mujer"
+   ],
+   "raza_etnia": [
+    "AIAN no hispano",
+    "AIAN y otro grupo",
+    "Asiático no hispano",
+    "Blanco no hispano",
+    "Hispano",
+    "Negro no hispano",
+    "Otro / múltiple"
+   ],
+   "educacion": [
+    "Menos que secundaria",
+    "Posgrado",
+    "Pregrado",
+    "Secundaria o GED",
+    "Técnico o universidad incompleta"
+   ],
+   "hipertension": [
+    "No",
+    "Sí"
+   ],
+   "colesterol_alto": [
+    "No",
+    "Sí"
+   ],
+   "diabetes": [
+    "No",
+    "Sí"
+   ],
+   "acv": [
+    "No",
+    "Sí"
+   ],
+   "depresion_dx": [
+    "No",
+    "Sí"
+   ],
+   "frecuencia_depresion": [
+    "Diaria",
+    "Mensual",
+    "Nunca",
+    "Pocas veces al año",
+    "Semanal"
+   ],
+   "dificultad_auditiva": [
+    "Alguna",
+    "Mucha",
+    "Ninguna",
+    "No puede"
+   ],
+   "dificultad_visual": [
+    "Alguna",
+    "Mucha",
+    "Ninguna",
+    "No puede"
+   ],
+   "tabaquismo": [
+    "Exfumador",
+    "Fumador actual",
+    "Nunca fumó"
+   ],
+   "imc_categoria": [
+    "Bajo peso",
+    "Normal",
+    "Obesidad",
+    "Sobrepeso"
+   ]
+  },
+  "admite_faltantes": true
+ },
+ "entrenado_con": "44903 filas (entrenamiento completo, sin la prueba)",
+ "archivo": "DecisionTree.joblib",
+ "tamano_MB": 0.02,
+ "prueba_ida_y_vuelta": "identica (np.array_equal) en 300 filas fijas"
+}
