@@ -1,0 +1,8 @@
+,PR_AUC,PR_AUC,ROC_AUC,ROC_AUC,Brier,Brier,ECE,ECE,rugosidad_edad,rugosidad_edad,cambios_de_signo_edad,cambios_de_signo_edad
+,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std
+variante,,,,,,,,,,,,
+completo,0.5194,0.0114,0.7927,0.0068,0.1308,0.0017,0.0166,0.0021,3.2627,0.2974,15.8,2.2804
+sin_suavizado (kappa=0),0.5196,0.0115,0.7927,0.0068,0.1308,0.0017,0.0164,0.0021,3.5239,0.2726,16.6,1.6733
+sin_ridge (lambda=0.001),0.5187,0.0112,0.7925,0.0068,0.1309,0.0016,0.0167,0.002,3.426,0.3716,15.8,2.2804
+sin_orden_categorico,0.5196,0.0115,0.7928,0.0067,0.1308,0.0017,0.0166,0.0022,3.2635,0.2972,15.8,2.2804
+una_ronda_de_prueba (n_rondas=1),0.5133,0.011,0.789,0.0061,0.1376,0.0043,0.0618,0.0261,1.1113,0.4947,15.4,0.8944

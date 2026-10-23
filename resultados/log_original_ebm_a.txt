@@ -1,0 +1,10 @@
+rep1 f0 EBM                PR-AUC=0.5272 t=85s
+rep1 f1 EBM                PR-AUC=0.5008 t=55s
+rep1 f2 EBM                PR-AUC=0.5288 t=47s
+rep1 f3 EBM                PR-AUC=0.5126 t=64s
+rep1 f4 EBM                PR-AUC=0.5362 t=78s
+rep3 f0 EBM                PR-AUC=0.5368 t=72s
+rep3 f1 EBM                PR-AUC=0.5158 t=54s
+rep3 f2 EBM                PR-AUC=0.5145 t=36s
+rep3 f3 EBM                PR-AUC=0.5245 t=64s
+rep3 f4 EBM                PR-AUC=0.5161 t=43s

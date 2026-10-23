@@ -1,9 +1,11 @@
-dash>=2.14,<5
-dash-bootstrap-components>=1.5
-plotly>=5.18
-pandas>=2.0
-numpy>=1.26
-scipy>=1.11
-scikit-learn>=1.4
-statsmodels>=0.14
-gunicorn
+# Versiones exactas (probadas con Python 3.12 en Render y con 3.13 en local; todas tienen rueda para cp312)
+dash==4.4.1
+dash-bootstrap-components==2.0.4
+plotly==7.1.0
+pandas==3.0.5
+numpy==2.5.3
+scipy==1.18.1
+scikit-learn==1.9.1
+statsmodels==0.15.0
+joblib==1.6.0
+gunicorn==26.2.0

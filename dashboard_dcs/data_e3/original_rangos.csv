@@ -1,0 +1,10 @@
+modelo,rango_medio
+EBM,2.2
+SVM,2.72
+AditivoPenalizado,3.04
+XGBoost,3.52
+LogReg,3.68
+RandomForest,5.84
+DecisionTree,7.68
+NaiveBayes,7.84
+KNN,8.48

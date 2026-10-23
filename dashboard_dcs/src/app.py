@@ -40,6 +40,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))   # para importar el pa
 from dcs import benchmark_tabs as E                               # noqa: E402
 from dcs import figuras as F                                   # noqa: E402
 from dcs.calculos import ETIQUETAS, obtener_artefactos         # noqa: E402
+from dcs import original_tab as OT                              # noqa: E402
 from dcs.utils import (DICCIONARIO, OBJETIVO, ORDENES, PREDICTORAS, PREDICTORAS_CAT,  # noqa: E402
                        cargar_particiones)
 
@@ -119,9 +120,14 @@ def layout_contexto():
                 "La dificultad cognitiva subjetiva (DCS) es la percepción propia de tener problemas para recordar o concentrarse; "
                 "quienes la reportan tienen cerca del doble de riesgo de desarrollar demencia."),
         dbc.Row([
-            dbc.Col(html.Div([html.Small("Pregunta de investigación"),
+            dbc.Col([html.Div([html.Small("Pregunta de investigación"),
                               "¿Qué tan bien pueden predecir la dificultad cognitiva subjetiva los factores de riesgo "
-                              "modificables de demencia y el antecedente de accidente cerebrovascular?"], className="pregunta"), lg=7),
+                              "modificables de demencia y el antecedente de accidente cerebrovascular?"], className="pregunta"),
+                     html.Figure([html.Img(src="/assets/img/adulto_mayor_dcs.jpg",
+                                           alt="Adulto mayor que se lleva la mano a la frente con gesto de preocupación, sosteniendo sus gafas",
+                                           style={"width": "100%", "maxWidth": "420px", "borderRadius": "12px", "display": "block", "margin": "16px auto 4px"}),
+                                  html.Figcaption("Imagen ilustrativa de la dificultad cognitiva subjetiva.",
+                                                  style={"fontSize": "12px", "textAlign": "center", "color": "#6a7179"})], style={"margin": "0"})], lg=7),
             dbc.Col(dbc.Row([
                 dbc.Col(kpi("56.129", "adultos analizados", "NHIS 2022-2023, CDC"), width=6, className="mb-3"),
                 dbc.Col(kpi(pct_es(0.2056 if False else prevalencia), "con alguna dificultad", "prevalencia en entrenamiento", "teal"), width=6, className="mb-3"),
@@ -332,13 +338,13 @@ ORDEN_SIM = ["edad", "sexo", "raza_etnia", "educacion", "hipertension", "coleste
              "dificultad_auditiva", "dificultad_visual", "tabaquismo", "imc_categoria"]
 
 
-def control_sim(v):
+def control_sim(v, pref="sim"):
     if v == "edad":
         return dbc.Col([html.Div(ETIQUETAS[v], className="ctrl-et"),
-                        dcc.Slider(id=f"sim-{v}", min=18, max=85, step=1, value=PRESETS["medio"][v], marks={18: "18", 40: "40", 60: "60", 85: "85+"},
+                        dcc.Slider(id=f"{pref}-{v}", min=18, max=85, step=1, value=PRESETS["medio"][v], marks={18: "18", 40: "40", 60: "60", 85: "85+"},
                                    tooltip={"placement": "bottom", "always_visible": True})], md=12, className="mb-3")
     return dbc.Col([html.Div(ETIQUETAS[v], className="ctrl-et"),
-                    dcc.Dropdown(id=f"sim-{v}", options=CATS[v], value=PRESETS["medio"][v], clearable=False, style={"fontSize": "13px"})], md=6, className="mb-2")
+                    dcc.Dropdown(id=f"{pref}-{v}", options=CATS[v], value=PRESETS["medio"][v], clearable=False, style={"fontSize": "13px"})], md=6, className="mb-2")
 
 
 def layout_modelos():
@@ -454,7 +460,7 @@ def layout_benchmark():
     return html.Div([
         seccion("Benchmark de 112 combinaciones",
                 "7 modelos × 4 técnicas de balanceo × 4 optimizadores de hiperparámetros, con validación cruzada anidada (5 folds externos, 3 internos) y preprocesamiento dentro de cada fold. "
-                "La tabla muestra 108 combinaciones: KNN no admite pesos de clase, así que las 4 de KNN con class_weight no aplican. El EBM va aparte como modelo original."),
+                "La tabla muestra 108 combinaciones: KNN no admite pesos de clase, así que las 4 de KNN con class_weight no aplican. El EBM y el modelo original (aditivo penalizado) van aparte, en la pestaña 7."),
         dbc.Row([
             dbc.Col(kpi("108", "combinaciones evaluadas", "540 tareas, 5.529 evaluaciones internas, 0 errores"), md=3, className="mb-3"),
             dbc.Col(kpi(n_es(mejor["PR_AUC_media"], 3), "mejor PR-AUC externo", f"{E.NOMBRES[mejor['modelo']]} · {mejor['balanceo']} · {mejor['optimizador']}", "teal"), md=3, className="mb-3"),
@@ -484,7 +490,7 @@ def layout_benchmark():
             dbc.Col(tarjeta("DeLong contra la mejor combinación (Holm)", _tabla(E.E3["delong"].sort_values("p_Holm").head(20).round(4), tam=10),
                             "Solo XGBoost queda detrás de la mejor, por 0,002 a 0,003 de AUC, una diferencia sin relevancia práctica."), lg=6),
             dbc.Col(tarjeta("EBM frente a las referencias", _tabla(E.E3["ebm"].round(4), tam=10),
-                            "El modelo original iguala a los mejores y no los supera. Su ventaja es que cada predicción se puede leer directamente."), lg=6),
+                            "El EBM (candidato interpretable de la librería interpret) iguala a los mejores y no los supera. Su ventaja es que cada predicción se puede leer directamente."), lg=6),
         ], className="g-3"),
         html.Div("Las 28 combinaciones de regresión del enunciado no aplican porque la variable objetivo es binaria. Ridge y Lasso quedan cubiertas por la regresión logística con penalización L2 y L1.", className="aviso"),
     ])
@@ -561,6 +567,85 @@ def layout_final():
 
 
 # ---------------------------------------------------------------------------
+# 4c. PESTAÑA 7 · MODELO ORIGINAL (aditivo penalizado por rondas, programado por el equipo)
+# ---------------------------------------------------------------------------
+def layout_original():
+    d = OT.cargar()
+    if not d["ok"]:
+        return html.Div(dbc.Alert(f"No se pudieron leer los resultados del modelo original ({d['error']}).", color="warning"))
+    v = d["veredicto"]
+    r3 = v["R3_cumplida"]
+    te = d["test"].set_index("modelo")
+    lider = d["lider"]
+    pareadas = d["pareadas"].copy()
+    pareadas["referencia"] = pareadas["referencia"].map(lambda k: OT.NOMBRES.get(k, k))
+    pareadas = pareadas[["referencia", "n_pares", "dif_media_PR_AUC", "IC95_BCa_inf", "IC95_BCa_sup", "wilcoxon_p", "wilcoxon_p_holm", "nadeau_bengio_p", "nadeau_bengio_p_holm", "cliffs_delta", "cohen_dz"]].round(4)
+    pareadas.columns = ["Referencia", "Pares", "Dif. PR-AUC", "IC BCa inf.", "IC BCa sup.", "Wilcoxon p crudo", "Wilcoxon p Holm", "Nadeau-Bengio p crudo", "Nadeau-Bengio p Holm", "Cliff δ", "d de Cohen"]
+    prueba = d["prueba"].copy(); prueba["referencia"] = prueba["referencia"].map(lambda k: OT.NOMBRES.get(k, k))
+    prueba = prueba.round(4)
+    return html.Div([
+        seccion("Modelo original: aditivo penalizado por rondas",
+                "Programado por el equipo solo con numpy (clase AditivoPenalizado, compatible con scikit-learn). La probabilidad es la suma de una curva por variable en la escala logit, "
+                "y las curvas se aprenden por rondas con una actualización derivada de una cota cuadrática que garantiza que el objetivo nunca aumente."),
+        dbc.Row([
+            dbc.Col(kpi("Sí", "R2 · implementación propia", "sin importar ningún modelo de otra librería", "teal"), md=3, className="mb-3"),
+            dbc.Col(kpi("Parcial", "R1 · novedad", "de aplicación y de implementación, no de mecanismo", "dorado"), md=3, className="mb-3"),
+            dbc.Col(kpi("No" if not r3 else "Sí", "R3 · superioridad significativa", f"PR-AUC {n_es(v['PR_AUC_media_original'], 4)} frente a {n_es(max(v['PR_AUC_media_por_referencia'].values()), 4)} del mejor benchmark", "osc"), md=3, className="mb-3"),
+            dbc.Col(kpi("Tope 4,0", "según la rúbrica del entregable", "cumple R2 y no cumple R3", ""), md=3, className="mb-3"),
+        ]),
+        html.Div("Veredicto honesto. El modelo original iguala a los mejores benchmarks y no los supera de forma estadísticamente significativa. Con 14 predictoras el rendimiento está en el techo de la información disponible, "
+                 "así que no hay margen para que ningún modelo gane. Su aporte es una implementación propia, verificada con pruebas unitarias, que entrega curvas legibles y valores SHAP exactos.", className="aviso"),
+
+        seccion("Tabla de líderes", "Mejor combinación de cada modelo base y los dos modelos aditivos, con 25 estimaciones externas pareadas (5 repeticiones × 5 pliegues, mismas particiones y semillas). Se puede ordenar y filtrar."),
+        tarjeta(None, dash_table.DataTable(id="ori-lider", columns=[{"name": c, "id": c} for c in lider.columns], data=lider.to_dict("records"), page_size=12,
+                                           sort_action="native", filter_action="native", **estilo_tabla()),
+                "Media ± desviación estándar de la PR-AUC del bucle externo, con el intervalo bootstrap BCa de la media, y tiempos medios de entrenamiento e inferencia. El EBM tiene menos estimaciones si alguna repetición falta."),
+
+        seccion("Predicción en vivo", "Mismo formulario de 14 variables, con la probabilidad y la explicación exacta del modelo original (valores SHAP en logit). Se carga el modelo ya entrenado, nunca se reentrena."),
+        dbc.Row([
+            dbc.Col(tarjeta("Perfil del adulto", html.Div([
+                html.Div([html.Button("Perfil de bajo riesgo", id="ori-b", className="btn-dcs sec chico"), html.Button("Perfil intermedio", id="ori-m", className="btn-dcs sec chico"),
+                          html.Button("Perfil de alto riesgo", id="ori-a", className="btn-dcs sec chico")], style={"marginBottom": "14px"}),
+                dbc.Row([control_sim(x, "ori") for x in ORDEN_SIM]),
+            ])), lg=5),
+            dbc.Col(tarjeta(None, html.Div([
+                html.Div(id="ori-alerta"),
+                dbc.Row([dbc.Col(grafica("ori-gauge", 260), md=5), dbc.Col(html.Div(id="ori-texto", className="resultado-sim", style={"paddingTop": "22px"}), md=7)]),
+                grafica("ori-shap")]), "Cada barra es el aporte de esa variable al logit respecto del efecto promedio. Como el modelo es aditivo, estos valores son SHAP exactos."), lg=7),
+        ], className="g-3"),
+
+        seccion("Descripción, pseudocódigo y diferencias con la literatura"),
+        dbc.Row([
+            dbc.Col(tarjeta("Pseudocódigo", html.Pre(OT.PSEUDOCODIGO, style={"fontSize": "12px", "whiteSpace": "pre-wrap", "background": "#FBF7F0", "padding": "12px", "borderRadius": "8px"}),
+                            "El objetivo es la pérdida logística más una penalización ridge (λ) y una penalización de suavizado entre niveles vecinos de variables ordenadas (κ). Complejidad O(R p n), predicción O(p) por fila."), lg=7),
+            dbc.Col(tarjeta("Qué es propio y qué no", html.Ul([
+                html.Li("No es nuevo el modelo aditivo (Hastie y Tibshirani, 1990), ni la penalización de diferencias (Eilers y Marx, 1996), ni el boosting por coordenadas (Friedman, 2001)."),
+                html.Li("Es propia la implementación en numpy, la regla de actualización derivada de la cota cuadrática, la propiedad de no aumento del objetivo y su verificación con pruebas unitarias."),
+                html.Li("Frente al EBM (Lou y colaboradores, 2013) cambia el paso, que es un sistema lineal por variable y no árboles pequeños, y no incluye interacciones."),
+                html.Li("No encontramos estudios que lo apliquen a DCS con la NHIS en PubMed, Scopus AI y un buscador web. Es una afirmación sobre esas búsquedas, no una prueba de que no exista."),
+            ], style={"fontSize": "13.5px"}), None), lg=5),
+        ], className="g-3"),
+
+        seccion("Curvas aprendidas, convergencia y complejidad"),
+        tarjeta(None, html.Img(src="/assets/e3/original_curvas.png", style={"width": "100%"}), "Una curva por variable. La edad reproduce la U del EDA, la depresión tiene un gradiente claro y la educación es protectora."),
+        tarjeta(None, html.Img(src="/assets/e3/original_convergencia_complejidad.png", style={"width": "100%"}),
+                "Izquierda: el objetivo baja de forma monótona. Centro: curva de aprendizaje en el pliegue 0. Derecha: el tiempo crece cerca de lo lineal con n y con p."),
+        tarjeta("Estudio de ablación (pliegues externos, mismos hiperparámetros)", _tabla(d["ablacion"], tam=8),
+                "Quitar el suavizado, el ridge o el orden de las categóricas casi no cambia la PR-AUC. El suavizado reduce la rugosidad de la curva de la edad cerca de 7 %."),
+
+        seccion("Verificación estadística de la superioridad", f"{v['pruebas_realizadas']} pruebas, con p ajustado por Holm, tamaños del efecto e intervalos BCa. Total de comparaciones: {v['comparaciones_totales']}."),
+        tarjeta("Diferencia crítica (Friedman y Nemenyi), modelo original incluido", html.Img(src="/assets/e3/original_cd.png", style={"width": "100%", "maxWidth": "860px", "display": "block", "margin": "0 auto"}),
+                "Las barras gruesas unen a los modelos que no se distinguen. El original queda empatado con la SVM, la logística y XGBoost."),
+        tarjeta("Pruebas pareadas por pliegue (PR-AUC, original menos referencia)", _tabla(pareadas, tam=10),
+                "Hipótesis nula, igual desempeño. Supuestos revisados, datos de corte transversal e independencia aproximada, por eso se usa la corrección de Nadeau y Bengio para la validación repetida. Cliff δ y d de Cohen son los tamaños del efecto."),
+        tarjeta("Pruebas en el conjunto de prueba (DeLong y McNemar con umbral 0,245)", _tabla(prueba, tam=6),
+                "DeLong compara el AUC con dependencia entre curvas. McNemar compara los aciertos de cada par con el mismo umbral. Ambas con Holm."),
+        tarjeta("Desempeño en la prueba reservada", _tabla(d["test"].round(4), tam=6), "Una sola evaluación. El modelo original queda en la misma zona que los finalistas del segundo entregable."),
+        html.Div("Si la diferencia no es significativa, se reporta tal cual y define el tope de 4,0. Esto no invalida el trabajo, según la rúbrica del entregable.", className="aviso"),
+    ])
+
+
+# ---------------------------------------------------------------------------
 # 5. ENSAMBLADO DE LA APP Y CALLBACKS
 # ---------------------------------------------------------------------------
 app = dash.Dash(__name__, title="DCS y factores de riesgo de demencia · Proyecto de Machine Learning",
@@ -582,7 +667,8 @@ app.layout = html.Div([
                   dbc.Tab(label="3 · Modelos base", tab_id="tab-modelos"),
                   dbc.Tab(label="4 · Benchmark", tab_id="tab-bench"),
                   dbc.Tab(label="5 · Optimización y costo", tab_id="tab-opt"),
-                  dbc.Tab(label="6 · Resultado final, interpretación y robustez", tab_id="tab-final")], id="tabs", active_tab="tab-contexto"),
+                  dbc.Tab(label="6 · Resultado final, interpretación y robustez", tab_id="tab-final"),
+                  dbc.Tab(label="7 · Modelo original", tab_id="tab-original")], id="tabs", active_tab="tab-contexto"),
         html.Div(id="contenido", className="pb-4"),
         html.Div("Fuente de los datos: NCHS, National Health Interview Survey 2022 y 2023, Sample Adult Interview (CDC). Semilla aleatoria 42 · partición 80/20 estratificada. "
                  "Las asociaciones son transversales y no implican causalidad.", className="pie"),
@@ -603,6 +689,8 @@ def pintar_pestana(tab):
         return layout_optimizacion()
     if tab == "tab-final":
         return layout_final()
+    if tab == "tab-original":
+        return layout_original()
     return layout_contexto()
 
 
@@ -794,6 +882,34 @@ def simulador(*valores):
              html.P([f"Con el umbral óptimo del modelo ({n_es(UM_LR, 3)}), este perfil ", html.B("sí" if supera else "no"),
                      " sería marcado como de mayor riesgo." if supera else " sería marcado."])]
     return F.fig_gauge(prob, UM_LR), texto, F.fig_contrib(contrib)
+
+
+# ---- 5.6 Modelo original: predicción en vivo con el artefacto ya entrenado ----
+@app.callback([Output(f"ori-{v}", "value") for v in ORDEN_SIM], Input("ori-b", "n_clicks"), Input("ori-m", "n_clicks"), Input("ori-a", "n_clicks"), prevent_initial_call=True)
+def preajustes_original(*_):
+    clave = {"ori-b": "bajo", "ori-m": "medio", "ori-a": "alto"}[ctx.triggered_id]
+    return [PRESETS[clave][v] for v in ORDEN_SIM]
+
+
+@app.callback(Output("ori-gauge", "figure"), Output("ori-texto", "children"), Output("ori-shap", "figure"), Output("ori-alerta", "children"),
+              [Input(f"ori-{v}", "value") for v in ORDEN_SIM])
+def prediccion_original(*valores):
+    perfil = dict(zip(ORDEN_SIM, valores))
+    faltan = [ETIQUETAS[k] for k, x in perfil.items() if x is None]
+    if faltan:
+        return dash.no_update, dash.no_update, dash.no_update, dbc.Alert("Complete todos los campos antes de predecir. Falta: " + ", ".join(faltan), color="warning")
+    try:
+        perfil["edad"] = float(perfil["edad"])
+        if not 18 <= perfil["edad"] <= 85:
+            raise ValueError("La edad debe estar entre 18 y 85 años.")
+        prob, d = OT.predecir(perfil)
+    except Exception as e:   # entrada inválida o artefacto no disponible: se avisa sin detener la app
+        return dash.no_update, dash.no_update, dash.no_update, dbc.Alert(f"No se pudo calcular la predicción. {e}", color="danger")
+    prev = A["prevalencia_tr"]
+    supera = prob >= OT.UMBRAL
+    texto = [html.P([html.B(f"{n_es(prob * 100, 1)} %"), f" de probabilidad estimada de reportar dificultad cognitiva, es decir {n_es(prob / prev, 1)} veces la prevalencia de la muestra ({pct_es(prev)})."]),
+             html.P([f"Con el umbral de {n_es(OT.UMBRAL, 3)}, este perfil ", html.B("sí" if supera else "no"), " sería marcado como de mayor riesgo."])]
+    return F.fig_gauge(prob, OT.UMBRAL), texto, OT.fig_shap(d), None
 
 
 # ---- 5.x Pestañas del benchmark ----

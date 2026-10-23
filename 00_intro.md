@@ -33,8 +33,9 @@ la línea base trivial, y un ROC-AUC de 0,804 [0,794-0,814], con buena calibraci
 sobreajuste. Para saber si ese desempeño moderado es un límite de la información disponible o del
 modelo, lo comparamos con un benchmark de 112 combinaciones de siete modelos, cuatro técnicas de
 balanceo y cuatro optimizadores de hiperparámetros, con validación cruzada anidada y sin fuga de
-información, y con un modelo original, el Explainable Boosting Machine (EBM). El resultado es que
-ninguna combinación supera de forma significativa a la regresión logística, que el balanceo con
+información, y con un modelo original aditivo penalizado que programamos con numpy, junto al
+Explainable Boosting Machine (EBM) como candidato interpretable. El resultado es que
+ninguna combinación, ni el modelo original, supera de forma significativa a la regresión logística, que el balanceo con
 remuestreo daña la calibración sin mejorar la discriminación, y que las variables que más pesan son
 las mismas en SHAP, en los coeficientes y en el EBM, con la depresión y la edad a la cabeza. El techo
 parece estar en la información de las 14 predictoras y no en la complejidad del modelo.
@@ -50,20 +51,27 @@ Flujo general del proyecto, de la base de datos al benchmark de modelos, capítu
 
 ## Estructura del informe
 
+Este libro integra el segundo y el tercer entregable en un solo informe. La tabla de trazabilidad que sigue a esta introducción muestra dónde se resolvió cada observación y cada bloque del entregable final.
+
 | Capítulo | Contenido |
 |---|---|
 | 1. Base de datos | Problema, justificación, fuente y licencia, diccionario, estructura, reserva del conjunto de prueba, tamaño de muestra, calidad de datos y ética |
 | 2. Análisis exploratorio | Variable objetivo, análisis uni, bi y multivariado, y aplicabilidad de los componentes temporal y espacial |
 | 3. Fuga de datos y preprocesamiento | Auditoría de fuga y pipeline de preprocesamiento |
 | 4. Modelo base | Línea base trivial, regresión logística, métricas con IC bootstrap, calibración, residuos, curva de aprendizaje y coeficientes |
-| 5. Benchmark de modelos | Diseño sin fuga, 108 combinaciones evaluadas, modelo original (EBM), estadística jerárquica, optimización y complejidad, resultado final, calibración, SHAP y LIME, y robustez |
-| Conclusiones | Hallazgos, limitaciones y próximos pasos |
-| Referencias | Bibliografía del proyecto |
+| 5. Benchmark de modelos | Diseño sin fuga, 108 combinaciones evaluadas, EBM como candidato interpretable, estadística jerárquica, optimización y complejidad, resultado final, calibración, SHAP y LIME, y robustez |
+| 6. Revisión de literatura y novedad | Diez búsquedas en tres fuentes, matriz de novedad, trabajos cercanos y declaración de novedad acotada |
+| 7. Modelo original | Aditivo penalizado por rondas, programado con numpy. Formulación, pseudocódigo, complejidad, pruebas unitarias, ablación e interpretabilidad |
+| 8. Validación estadística | Validación anidada repetida (25 estimaciones pareadas), cinco pruebas con ajuste de Holm, tamaños del efecto, intervalos BCa y veredicto sobre R3 |
+| 9. Dashboard y despliegue | Arquitectura, pestañas, decisiones de diseño y despliegue en Render |
+| 10. Conclusiones | Hallazgos, veredicto sobre R1, R2 y R3, limitaciones y próximos pasos |
+| 11. Reproducibilidad y bibliografía | Entorno, semillas, tabla maestra de experimentos, declaración de autoría y uso de IA y referencias |
 
-Además del libro hay un dashboard interactivo (carpeta `dashboard_dcs/`) con seis pestañas, que
+Además del libro hay un dashboard interactivo (carpeta `dashboard_dcs/`) con siete pestañas, que
 recorre el mismo camino. Las tres primeras presentan el contexto, el EDA con filtros y el modelo
-base, con un simulador de riesgo, y las tres últimas muestran el benchmark, la optimización y el
-costo computacional, y el resultado final con interpretabilidad y robustez.
+base, con un simulador de riesgo. La cuarta a la sexta muestran el benchmark, la optimización y el
+costo computacional, y el resultado final con interpretabilidad y robustez. La séptima presenta el
+modelo original, con tabla de líderes, predicción en vivo con explicación exacta y verificación estadística.
 
 ## Reproducibilidad
 

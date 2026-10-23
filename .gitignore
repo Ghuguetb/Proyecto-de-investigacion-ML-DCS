@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 resultados/log_benchmark.txt
 _build/
+.pytest_cache/

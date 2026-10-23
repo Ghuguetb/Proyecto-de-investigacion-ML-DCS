@@ -1,0 +1,36 @@
+{
+ "PR_AUC_media_original": 0.5198200579625837,
+ "PR_AUC_media_por_referencia": {
+  "DecisionTree": 0.47360347806562314,
+  "EBM": 0.5211360969415848,
+  "KNN": 0.46447867121760644,
+  "LogReg": 0.5194841294659,
+  "NaiveBayes": 0.47115437437051466,
+  "RandomForest": 0.5061757528527526,
+  "SVM": 0.5201907634156336,
+  "XGBoost": 0.5175605452878892
+ },
+ "el_original_gana_en_media_a": {
+  "DecisionTree": true,
+  "EBM": false,
+  "KNN": true,
+  "LogReg": true,
+  "NaiveBayes": true,
+  "RandomForest": true,
+  "SVM": false,
+  "XGBoost": true
+ },
+ "condicion_1_media_mayor_que_todas": false,
+ "pruebas_realizadas": 5,
+ "pruebas_que_rechazan_a_favor_del_original": {
+  "Friedman y Nemenyi (diferencia de rangos mayor que CD frente a todos)": false,
+  "Wilcoxon pareado con Holm": false,
+  "t corregida de Nadeau y Bengio con Holm": false,
+  "DeLong en la prueba con Holm": false,
+  "McNemar en la prueba con Holm": false
+ },
+ "condicion_2_al_menos_tres_pruebas": false,
+ "condicion_3_efecto_no_despreciable_a_favor": false,
+ "R3_cumplida": false,
+ "comparaciones_totales": 25
+}
