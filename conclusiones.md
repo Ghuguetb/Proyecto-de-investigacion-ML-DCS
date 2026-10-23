@@ -35,7 +35,7 @@ Con esta lectura, la nota máxima que se puede esperar por el componente del mod
 - Exclusión de la pregunta de seguimiento de cognición, que por sí sola alcanzaba un AUC de 0,929, ya que sin esta auditoría el modelo habría superado artificialmente el umbral de 0,90.
 - Uso de la categoría de IMC en lugar del IMC numérico, por el faltante de tipo MNAR de este último.
 - Descarte del accuracy como métrica de decisión, ya que el modelo trivial obtiene 0,794 sin detectar un solo caso.
-- Umbral de decisión de 0,245, elegido con predicciones out-of-fold del entrenamiento.
+- Umbral de decisión de 0,246 en el modelo base (capítulo 4) y de 0,245 en los finalistas (capítulo 5), elegido con predicciones out-of-fold del entrenamiento.
 - Validación cruzada anidada con todo el preprocesamiento y el remuestreo dentro de cada fold, y conjunto de prueba usado una sola vez, solo con los finalistas.
 - Comparación estadística jerárquica (Friedman, Nemenyi por factor y DeLong con Holm), declarando que con cinco folds el Nemenyi global no tiene potencia.
 - Para comparar el modelo original se repitió la validación anidada cinco veces (25 estimaciones pareadas) y se usaron cinco pruebas con corrección de Holm, con el criterio de decisión fijado antes de ver los resultados.
