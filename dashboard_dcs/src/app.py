@@ -120,9 +120,14 @@ def layout_contexto():
                 "La dificultad cognitiva subjetiva (DCS) es la percepción propia de tener problemas para recordar o concentrarse; "
                 "quienes la reportan tienen cerca del doble de riesgo de desarrollar demencia."),
         dbc.Row([
-            dbc.Col(html.Div([html.Small("Pregunta de investigación"),
+            dbc.Col([html.Div([html.Small("Pregunta de investigación"),
                               "¿Qué tan bien pueden predecir la dificultad cognitiva subjetiva los factores de riesgo "
-                              "modificables de demencia y el antecedente de accidente cerebrovascular?"], className="pregunta"), lg=7),
+                              "modificables de demencia y el antecedente de accidente cerebrovascular?"], className="pregunta"),
+                     html.Figure([html.Img(src="/assets/img/adulto_mayor_dcs.jpg",
+                                           alt="Adulto mayor que se lleva la mano a la frente con gesto de preocupación, sosteniendo sus gafas",
+                                           style={"width": "100%", "maxWidth": "420px", "borderRadius": "12px", "display": "block", "margin": "16px auto 4px"}),
+                                  html.Figcaption("Imagen ilustrativa de la dificultad cognitiva subjetiva.",
+                                                  style={"fontSize": "12px", "textAlign": "center", "color": "#6a7179"})], style={"margin": "0"})], lg=7),
             dbc.Col(dbc.Row([
                 dbc.Col(kpi("56.129", "adultos analizados", "NHIS 2022-2023, CDC"), width=6, className="mb-3"),
                 dbc.Col(kpi(pct_es(0.2056 if False else prevalencia), "con alguna dificultad", "prevalencia en entrenamiento", "teal"), width=6, className="mb-3"),
